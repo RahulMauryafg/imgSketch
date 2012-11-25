@@ -1,0 +1,182 @@
+<form novalidate name="imageForm">
+
+	<input type="text" ng-hide="true" name="sketchData" ng-model="formData.imageData.data" id="sketchData"/>
+	<input type="text" ng-hide="true" name="sketchTop" ng-model="formData.imageData.posY" id="sketchTop" />
+	<input type="text" ng-hide="true" name="sketchLeft" ng-model="formData.imageData.posX" id="sketchLeft" />
+	<input type="text" ng-hide="true" name="textTop" ng-model="formData.imageText.posY" id="textTop" />
+	<input type="text" ng-hide="true" name="textLeft" ng-model="formData.imageText.posX" id="textLeft" />
+	<input type="text" ng-hide="true" name="textHeight" ng-model="formData.imageText.height" id="textHeight" />
+	<input type="text" ng-hide="true" name="textWidth" ng-model="formData.imageText.width" id="textWidth" />
+
+	<div id="templateImageSelect" class="clearfix">
+		<div ng-repeat="template in settings.templates" ng-click="selectTemplate($index)" style="height:97px; width: 292px; float: right;">
+			<input type="radio" name="imageTemplate" value="{{template.id}}" ng-model="formData.imageTemplate" class="imageTemplateRadio" id="imageTemplate{{template.id}}"/>
+			<label for="imageTemplate{{template.id}}" class="imageTemplateLabel">
+				<img ng-src="{{settings.host}}{{template.path}}" width="290" height="95"/>
+			</label>
+		</div>
+	</div>
+
+	<div style="width: 580px; margin: 10px auto;" class="clearfix">
+		<div id="textSelect" style="width: 300px; float: right;">
+			<input type="text" placeholder="enter text here" name="imageText" maxlength="20" ng-model="formData.imageText.text" ng-required="true" id="imageTextInput" />
+		</div>
+
+		<div id="sketchSelect" style="width: 250px; float: right;">
+			<div class="clearfix">
+				<div id="editor" style="direction:ltr; width: 180px; height: 180px; border: #333 solid 1px;" class="clearfix"></div>
+				<div class="editorTools clearfix">
+					<div class="editorColor" id="colorRed" rel="FF0000"></div>
+					<div class="editorColor" id="colorBlack" rel="000000"></div>
+					<div class="editorColor" id="colorBlue" rel="0000FF"></div>
+					<div class="editorColor" id="colorGreen" rel="008000"></div>
+					<div class="editorColor" id="colorGray" rel="808080"></div>
+					<div class="editorAction" id="editRedo" rel="redo">
+						<span class="ui-icon ui-icon-arrowreturnthick-1-e" style="display:inline-block;"></span>
+					</div>
+					<div class="editorAction" id="editUndo" rel="undo">
+						<span class="ui-icon ui-icon-arrowreturnthick-1-w" style="display:inline-block;"></span>
+					</div>
+					<div class="editorAction" id="editorClear" rel="clear">
+						<span class="ui-icon ui-icon-trash" style="display:block;"></span>
+					</div>
+				</div>
+			</div>
+
+			<div class="clearfix">
+				<div 
+					class="penAction" 
+					id="penWide" 
+					rel="10">
+					<span 
+						class="ui-icon ui-icon-minusthick" 
+						style="display:block;"></span>
+				</div>
+				<div 
+					class="penAction" 
+					id="penThin" 
+					rel="5">
+					<span 
+						class="ui-icon ui-icon-minus" 
+						style="display:block;"></span>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="templatePreview">
+		<div 
+			class="templateTextPreview previewDraggable" 
+			rel="text">{{formData.imageText.text}}</div>
+		<div 
+			class="templateSketchPreview previewDraggable" 
+			id="viewer" 
+			rel="sketch"></div>
+			<img 
+				ng-src="{{settings.host}}{{currentTemplate.path}}" 
+				class="templateImagePreview" />
+		</div>
+	<input 
+		type="submit" 
+		value="next" 
+		ng-click="save()" 
+		ng-disabled="!imageForm.imageText.$valid"/>
+</form>
+
+<div 
+	id="loginDialog" 
+	ng-controller="UserCtrl" 
+	ui-jq="dialog" 
+	ui-options="{title:'please login',autoOpen: false, height: 310, width: 700, modal: true, resizable: false, show: 'slow'}">
+	<div id="loginWrapper" style="float:left; width: 331px; border-right: #333 solid 1px; height: 235px;">
+		<div style="width: 212px; margin: 0 auto;">
+			<div style="text-align: center;">login</div>
+			<form name="loginForm">
+				<input 
+					type="text" 
+					name="username" 
+					placeholder="username"
+					ng-model="loginData.email"/>
+				<input 
+					type="password" 
+					name="password" 
+					placeholder="password"
+					ng-model="loginData.password"/>
+				<div style="text-align: center;">
+					<button ng-click="login()">login</button>
+				</div>
+			</form>
+		</div>
+		<div style="width:174px; margin: 62px auto 0 auto;">
+			<span>login with facebook</span>
+			<button>facebook connect</button>
+		</div>
+	</div>
+	<div id="registerWrapper" style="float:left; width: 332px; height: 235px;">
+		<div style="text-align: center;">register</div>
+		<div style="width: 212px; margin: 0 auto;">
+			<form name="registerForm">
+				<input 
+					type="text" 
+					name="firstName"
+					placeholder="first name"
+					ng-model="registerData.firstName"
+					required />
+				<input
+					type="text"
+					name="lastName"
+					placeholder="last name"
+					ng-model="registerData.lastName" 
+					required />
+				<input
+					type="number"
+					name="age"
+					placeholder="age"
+					ng-model="registerData.age"
+					min="0"
+					max="99"
+					ng-maxlength="2"
+					required />
+				<input
+					type="email"
+					name="email"
+					placeholder="email@domain.com"
+					ng-model="registerData.email"
+					required />
+				<input 
+					type="number"
+					name="phonePre"
+					placeholder="kidomet"
+					ng-model="registerData.phoneExt"
+					ng-maxLength="3"
+					required />
+				<input
+					type="number"
+					name="phone"
+					placeholder="number"
+					ng-model="registerData.phone"
+					ng-maxLength="7"
+					required />
+				<input
+					type="password"
+					name="password"
+					placeholder="password"
+					ng-model="registerData.password"
+					required />
+				<div style="text-align: center;">
+					<button ng-click="register()">register</button>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
+
+<div
+	id="imageDialog"
+	ng-controller="ImageCtrl"
+	ui-jq="dialog"
+	ui-options="{title:'Image created',autoOpen:false,height: 310, width: 700, modal: true, resizable: false, show: 'slow'}">
+	<img ng-src="{{settings.host}}{{imageData.imagePath}}" width="580" heigth="190" />
+</div>
+
+<script src="js/main.js">
