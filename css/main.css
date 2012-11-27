@@ -204,10 +204,9 @@ ul#home_menu li:last-child {
 
 }
 #templateImageSelect .templ{
-    height:68px;
-    width: 152px;
-    float: right;
-    overflow:hidden;
+    height:20px;
+    width: 20px;
+    float: left;
     border-radius: 6px;
     margin: 0;
     border: transparent solid 2px;
@@ -227,8 +226,13 @@ ul#home_menu li:last-child {
     cursor: pointer;
     border-radius: 6px;
     overflow: hidden;
-    width: 152px;
-    height: 68px;
+    width: 20px;
+    height: 20px;
+    background: red;
+    line-height: 20px;
+    text-align: center;
+    color: white;
+    font-weight: bold;
 }
 .imageTemplateLabel img {
     display: block;

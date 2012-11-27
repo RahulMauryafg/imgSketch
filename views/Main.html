@@ -15,9 +15,7 @@
 		<div id="templateImageSelect" class="clearfix">
 			<div ng-repeat="template in settings.templates" ng-click="selectTemplate($index)" class="templ">
 				<input type="radio" name="imageTemplate" value="{{template.id}}" ng-model="formData.imageTemplate" class="imageTemplateRadio" id="imageTemplate{{template.id}}"/>
-				<label for="imageTemplate{{template.id}}" class="imageTemplateLabel">
-					<img ng-src="{{settings.host}}{{template.path}}" width="290" height="95"/>
-				</label>
+				<label for="imageTemplate{{template.id}}" class="imageTemplateLabel">{{$index+1}}</label>
 			</div>
 		</div>
 
