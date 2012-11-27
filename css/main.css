@@ -22,7 +22,6 @@ body {
     font-size: 12px;
     line-height: 1.4;
     direction: rtl;
-    background: #eee;
 }
 
 * {
@@ -109,34 +108,130 @@ textarea {
 /* ==========================================================================
    Author's custom styles
    ========================================================================== */
-#menu {
-    width: 900px;
-    margin: 0 auto;
-    }
-#wrapper {
-    width: 840px;
-    margin: 0 auto;
-    background: white;
-    padding: 30px;
+
+html, body {
+    overflow: hidden;
 }
 
-#templateImageSelect {
-    width: 584px;
+#menu {
+    width: 800px;
     margin: 0 auto;
+}
+#wrapper {
+    width: 800px;
+    height: 600px;
+    margin: 0 auto;
+    background: white;
+    position: relative;
+    overflow: hidden;
+}
+
+
+/* =====================================
+   Home
+   ===================================== */
+
+#page_home {
+    height: 315px;
+    background: url(../img/home_bg.jpg) no-repeat center center;
+    position: relative;
+    padding: 285px 0 0 0;
+}
+
+ul#home_menu {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+    width: 635px;
+    height: 202px;
+    margin: 0 auto;
+}
+
+ul#home_menu li {
+    position: relative;
+    float: right;
+    margin: 0 0 0 8px;
+    background: white;
+    display: inline-block;
+    height: 202px;
+    width: 206px;
+    border-radius: 6px;
+    overflow: hidden;
+}
+
+ul#home_menu li a {
+    display: block;
+    border-radius: 6px;
+    overflow: hidden;
+}
+
+ul#home_menu li a img {
+    border-radius: 6px;
+    overflow: hidden;
+}
+
+ul#home_menu li:last-child {
+    margin: 0;
+}
+
+
+/* =====================================
+   Inner General
+   ===================================== */
+
+#page_inner {
+    height: 582px;
+    background: url(../img/inner_bg.jpg) no-repeat center center;
+    position: relative;
+    padding: 0 7px 0 11px;
+}
+
+#inner_menu {
+    width: 778px;
+    height: 30px;
+    background: gray;
+    opacity: 0.3;
+    position: absolute;
+    top: 106px;
+}
+/* =====================================
+   Sketch Design
+   ===================================== */
+
+#templateImageSelect {
+    position: absolute;
+    top: 178px;
+
+}
+#templateImageSelect .templ{
+    height:68px;
+    width: 152px;
+    float: right;
+    overflow:hidden;
+    border-radius: 6px;
+    margin: 0;
+    border: transparent solid 2px;
+    display: block;
+}
+
+#templateImageSelect .templ.active {
+    border: #b6272e solid 2px;
 }
 .imageTemplateRadio {
     display: none;
 }
 .imageTemplateLabel {
     display: block;
-    border: #ddd solid 1px;
+    padding: 0;
+    margin: 0;
     cursor: pointer;
+    border-radius: 6px;
+    overflow: hidden;
+    width: 152px;
+    height: 68px;
 }
 .imageTemplateLabel img {
     display: block;
-}
-.imageTemplateLabel.active{
-    border: blue solid 1px;
 }
 
 .editorColor, .editorAction {
@@ -153,6 +248,7 @@ textarea {
 .editorTools, #editor {
     float: right;
 }
+
 .editorAction span.ui-icon {
     font-size: 12px;
     line-height: 21px;
@@ -185,12 +281,14 @@ textarea {
 
 
 .templatePreview {
-    width: 580px;
-    height: 190px; 
-    background: #ddd;
-    position: relative;
-    border: #ddd solid 1px;
-    margin: 0 auto;
+    width: 774px;
+    height: 157px; 
+    background: #fff;
+    position: absolute;
+    border-radius: 6px;
+    border: white solid 2px;
+    top: 371px;
+    overflow: hidden;
 }
 
 .templatePreview .templateImagePreview { position: absolute; z-index: 1;}
@@ -210,17 +308,6 @@ textarea {
 .ui-tabs .ui-tabs-nav li.ui-tabs-selected,
 .ui-tabs .ui-tabs-nav li.ui-state-default {float: right; }
 .ui-tabs .ui-tabs-nav li a { float: right; }
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -332,9 +419,7 @@ textarea {
    Modify as content requires.
    ========================================================================== */
 
-@media only screen and (min-width: 35em) {
-    /* Style adjustments for viewports that meet the condition */
-}
+
 
 @media only screen and (-webkit-min-device-pixel-ratio: 1.5),
        only screen and (min-resolution: 144dpi) {

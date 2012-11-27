@@ -11,6 +11,11 @@ function MainCtrl($scope, $route, $routeParams, $location) {
   $scope.route = $route;
 }
 
+
+function HomeCtrl($scope){
+	
+}
+
 /*
  * General Controller
  * Controlling general settings
