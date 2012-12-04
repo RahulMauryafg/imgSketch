@@ -1,53 +1,107 @@
 <div id="page_inner">
 	<form novalidate name="imageForm">
-
-		<input type="text" ng-hide="true" name="sketchData" ng-model="formData.imageData.data" id="sketchData"/>
-		<input type="text" ng-hide="true" name="sketchTop" ng-model="formData.imageData.posY" id="sketchTop" />
-		<input type="text" ng-hide="true" name="sketchLeft" ng-model="formData.imageData.posX" id="sketchLeft" />
-		<input type="text" ng-hide="true" name="textTop" ng-model="formData.imageText.posY" id="textTop" />
-		<input type="text" ng-hide="true" name="textLeft" ng-model="formData.imageText.posX" id="textLeft" />
-		<input type="text" ng-hide="true" name="textHeight" ng-model="formData.imageText.height" id="textHeight" />
-		<input type="text" ng-hide="true" name="textWidth" ng-model="formData.imageText.width" id="textWidth" />
-
-
-		<div id="inner_menu"></div>
-
-		<div id="templateImageSelect" class="clearfix">
-			<div ng-repeat="template in settings.templates" ng-click="selectTemplate($index)" class="templ">
-				<input type="radio" name="imageTemplate" value="{{template.id}}" ng-model="formData.imageTemplate" class="imageTemplateRadio" id="imageTemplate{{template.id}}"/>
-				<label for="imageTemplate{{template.id}}" class="imageTemplateLabel">{{$index+1}}</label>
+		<input type="text" ng-hide="true" name="sketchData" ng-model="formData.payload.imageData.data" id="sketchData"/>
+		<input type="text" ng-hide="true" name="sketchTop" ng-model="formData.payload.imageData.posY" id="sketchTop" />
+		<input type="text" ng-hide="true" name="sketchLeft" ng-model="formData.payload.imageData.posX" id="sketchLeft" />
+		<input type="text" ng-hide="true" name="textTop" ng-model="formData.payload.imageText.posY" id="textTop" />
+		<input type="text" ng-hide="true" name="textLeft" ng-model="formData.payload.imageText.posX" id="textLeft" />
+		<input type="text" ng-hide="true" name="textHeight" ng-model="formData.payload.imageText.height" id="textHeight" />
+		<input type="text" ng-hide="true" name="textWidth" ng-model="formData.payload.imageText.width" id="textWidth" />	
+		<div class="templatePreview">
+			<textarea
+				class="{{!toggleText}} tpl{{currentTemplate.id}}"
+				placeholder="enter text here"
+				name="imageText"
+				ng-model="formData.payload.imageText.text"
+				ng-disabled="toggleText"
+				id="imageTextInput">
+			</textarea>
+			<div
+				id="editor"
+				class="clearfix {{toggleDraw}}">
+			</div>
+			<img
+				ng-src="{{settings.host}}{{currentTemplate.path}}" 
+				class="templateImagePreview" />
+		</div>
+		<div id="step_1" ng-show="stepCheck(1)" class="steps">
+			<input
+				id="next_step1"
+				type="submit" 
+				value="המשך" 
+				ng-click="step(2)"/>
+			<div
+				id="templateImageSelect"
+				class="clearfix">
+				<div
+					ng-repeat="template in settings.templates"
+					ng-click="selectTemplate($index)"
+					class="templ">
+						<input
+							type="radio" 
+							name="imageTemplate"
+							value="{{template.id}}"
+							ng-model="formData.payload.imageTemplate"
+							class="imageTemplateRadio"
+							id="imageTemplate{{template.id}}"/>
+						<label
+							for="imageTemplate{{template.id}}"
+							class="imageTemplateLabel">{{$index+1}}
+						</label>
+				</div>
+			</div>
+			<div
+				id="modeSelect"
+				ng-click="toggleEditMode()">
+				img {{toggleDraw}}
 			</div>
 		</div>
-
-		<input type="text" placeholder="enter text here" name="imageText" maxlength="20" ng-model="formData.imageText.text" ng-required="true" id="imageTextInput" />
-		<div id="editor" style="direction:ltr; width: 180px; height: 180px; border: #333 solid 1px;" class="clearfix"></div>
-
-	
-		<!-- <div class="editorColor" id="colorRed" rel="FF0000"></div>
-		<div class="editorAction" id="editorClear" rel="clear">
-			<span class="ui-icon ui-icon-trash" style="display:block;"></span>
-		</div> -->
-						
-		<div class="templatePreview">
-			<div 
-				class="templateTextPreview previewDraggable" 
-				rel="text">
-				{{formData.imageText.text}}
-			</div>
-			<div 
-				class="templateSketchPreview previewDraggable" 
-				id="viewer" 
-				rel="sketch">
-			</div>
-				<img 
-					ng-src="{{settings.host}}{{currentTemplate.path}}" 
-					class="templateImagePreview" />
-			</div>
-		<input 
-			type="submit" 
-			value="next" 
-			ng-click="save()" 
-			ng-disabled="!imageForm.imageText.$valid"/>
+		<div id="step_2" ng-show="stepCheck(2)" class="steps">
+			<input
+				type="radio"
+				name="orderType"
+				value="Download"
+				id="order_download"/>
+			<label
+				for="order_download">
+				Download
+			</label>
+			<input
+				type="radio"
+				name="orderType"
+				value="Sticker"
+				id="order_sticker"/>
+			<label
+				for="order_sticker">
+				Sticker
+			</label>
+			<input
+				type="radio"
+				name="orderType"
+				id="order_sign"/>
+			<label
+				for="order_sign">
+				Sign
+			</label>
+			<input
+				type="radio"
+				name="orderType"
+				id="order_shirt"/>
+			<label
+				for="order_shirt">
+				Shirt
+			</label>
+			<input
+				id="next_step2"
+				type="submit" 
+				value="המשך" 
+				ng-click="step(3)"/>
+			<input
+				id="next_step2"
+				type="submit" 
+				value="ערוך" 
+				ng-click="step(1)"/>
+		</div>
 	</form>
 
 	<div 
@@ -140,7 +194,6 @@
 
 	<div
 		id="imageDialog"
-		ng-controller="ImageCtrl"
 		ui-jq="dialog"
 		ui-options="{title:'Image created',autoOpen:false,height: 310, width: 700, modal: true, resizable: false, show: 'slow'}">
 		<img ng-src="{{settings.host}}{{imageData.imagePath}}" width="580" heigth="190" />

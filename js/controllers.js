@@ -11,17 +11,14 @@ function MainCtrl($scope, $route, $routeParams, $location) {
   $scope.route = $route;
 }
 
-
-function HomeCtrl($scope){
-	
-}
-
 /*
  * General Controller
  * Controlling general settings
 **/
 function GeneralCtrl($scope,$resource){
-	$scope.Settings = $resource('//gi.mediamagic.co.il/clients/avoda/stickers/resources/settings', {});
+	//Constructor
+
+	$scope.Settings = $resource('//gi.mediamagic.co.il/clients/avoda/printingCreator/resources/settings', {});
 	$scope.settings = $scope.Settings.get(function(r){ 
 		$scope.settings = r;
 		$scope.currentTemplate = $scope.settings.templates[0];
@@ -29,40 +26,66 @@ function GeneralCtrl($scope,$resource){
 		$scope.Rest = $resource($scope.settings.host + 'resources/:collection/:id', {});
 	});
 
-	$scope.user = {
-		token: 0,
-		userId: 0
-	};
+	$scope.sketchpad = Raphael.sketchpad("editor", {
+		width: 330,
+		height: 220,
+		editing: true
+	});
+
+	$scope.sketchpad.change(function() {
+		var json = $scope.sketchpad.json();
+		(json.length > 2) ?
+			$("#sketchData").val(escape($('#editor').html())).trigger('input').trigger('change') :
+			$("#sketchData").val('').trigger('input').trigger('change');
+	});
 
 	$scope.formData = {
-		imageText: {posX: 0, posY: 0 },
-		imageTemplate: 0
+		payload: {
+			imageText: {posX: 0, posY: 0 },
+			imageTemplate: 0
+		},
+		user: {
+		},
+		order: {
+		}
 	};
 
 	$scope.imageData = {};
+	$scope.currentStep = 1;
+	$scope.toggleDraw = false;
+	$scope.toggleText = false;
 	
+	//Form flow controls
 	$scope.selectTemplate = function(index){
 		$scope.currentTemplate = angular.copy($scope.settings.templates[index]);
 	}
 
-	$scope.save = function(){
-		if ($scope.user.token == 0) {
-			$('#loginDialog').dialog('open');
-		} else
-		$scope.sendImage($scope.formData);
+	$scope.step = function(step){
+		$scope.currentStep = step;
+		if (step >= 2){
+			$scope.toggleDraw = false;
+			$scope.toggleText = true;
+			$scope.sketchpad.editing(false);
+		} else {
+			$scope.toggleText = false;
+		}
 	}
 
-	$scope.$on('loginUser', function(e, a){
-		$scope.user = a;
-		$('#loginDialog').dialog('close');
-		$scope.sendImage($scope.formData);
-	});
+	$scope.stepCheck = function(step){
+		return (step === $scope.currentStep);
+	}
 
-	$scope.sendImage = function(_obj){
+	$scope.toggleEditMode = function(){
+		$scope.toggleDraw = !$scope.toggleDraw;
+		$scope.toggleText = !$scope.toggleText;
+		$scope.sketchpad.editing($scope.toggleDraw);
+	}
+
+	//submit controls
+	$scope.sendImage = function(){
 		_obj.token = $scope.user.token;
 		$scope.Rest.save({collection: 'image'}, _obj, function(response){
-			$scope.imageData = response;
-			$('#imageDialog').dialog('open');
+			//$('#imageDialog').dialog('open');
 		});
 	}
 }
@@ -92,10 +115,7 @@ function UserCtrl($scope,$resource){
 	}
 }
 
-function ImageCtrl($scope,$resource){
-}
-
-function AboutCtrl($scope){
+function paymentCtrl(){
 
 }
 
