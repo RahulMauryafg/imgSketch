@@ -5,19 +5,19 @@
  * create a global scope with routing information
 **/
 function MainCtrl($scope, $route, $routeParams, $location) {
-  $scope.$route = $route;
-  $scope.$location = $location;
-  $scope.$routeParams = $routeParams;
-  $scope.route = $route;
+	$scope.$route = $route;
+	$scope.$location = $location;
+	$scope.$routeParams = $routeParams;
+	$scope.route = $route;
 }
 
 /*
  * General Controller
  * Controlling general settings
 **/
+
 function GeneralCtrl($scope,$resource){
 	//Constructor
-
 	$scope.Settings = $resource('//gi.mediamagic.co.il/clients/avoda/printingCreator/resources/settings', {});
 	$scope.settings = $scope.Settings.get(function(r){ 
 		$scope.settings = r;
@@ -56,10 +56,9 @@ function GeneralCtrl($scope,$resource){
 	$scope.toggleText = false;
 	
 	//Form flow controls
-	$scope.selectTemplate = function(index){
+	$scope.selectTemplate = function (index) {
 		$scope.currentTemplate = angular.copy($scope.settings.templates[index]);
-	}
-
+	};
 	$scope.step = function(step){
 		$scope.currentStep = step;
 		if (step >= 2){
@@ -87,16 +86,16 @@ function GeneralCtrl($scope,$resource){
 		$scope.Rest.save({collection: 'image'}, _obj, function(response){
 			//$('#imageDialog').dialog('open');
 		});
-	}
+	};
 }
 
-function UserCtrl($scope,$resource){
+function UserCtrl($scope, $resource) {
 	$scope.loginData = {};
 	$scope.registerData = {};
 	$scope.error = false;
-	$scope.login = function(){
+	$scope.login = function () {
 		//$scope.loginData.password = jQuery.sha1($scope.loginData.password);
-		$scope.Api.save({action: 'login'}, $scope.loginData, function(response){
+		$scope.Api.save({action: 'login'}, $scope.loginData, function (response) {
 			if (response.error) {
 				$scope.error = true;
 				$scope.errorMsg = response.description;
@@ -104,21 +103,23 @@ function UserCtrl($scope,$resource){
 			}
 			$scope.$emit('loginUser', response);
 		});
-	}
+	};
 
 	$scope.registerData = {};
-	$scope.register = function(){
+	$scope.register = function () {
 		console.log($scope.registerData);
-		$scope.Rest.save({collection: 'user'}, $scope.registerData, function(response){
+		$scope.Rest.save({collection: 'user'}, $scope.registerData, function (response) {
 			console.log(response);
 		});
 	}
 }
 
 function paymentCtrl(){
-
 }
 
-function GalleryCtrl($scope,$resource){
+function ImageCtrl($scope, $resource) {
+}
+
+function GalleryCtrl($scope, $resource) {
 
 }

@@ -118,61 +118,14 @@ html, body {
     margin: 0 auto;
 }
 #wrapper {
-    width: 800px;
-    height: 600px;
+    width: 782px;
+    height: 616px;
     margin: 0 auto;
     background: white;
     position: relative;
     overflow: hidden;
 }
 
-
-/* =====================================
-   Home
-   ===================================== */
-
-#page_home {
-    height: 315px;
-    background: url(../img/home_bg.jpg) no-repeat center center;
-    position: relative;
-    padding: 285px 0 0 0;
-}
-
-ul#home_menu {
-    list-style-type: none;
-    padding: 0;
-    margin: 0;
-    width: 635px;
-    height: 202px;
-    margin: 0 auto;
-}
-
-ul#home_menu li {
-    position: relative;
-    float: right;
-    margin: 0 0 0 8px;
-    background: white;
-    display: inline-block;
-    height: 202px;
-    width: 206px;
-    border-radius: 6px;
-    overflow: hidden;
-}
-
-ul#home_menu li a {
-    display: block;
-    border-radius: 6px;
-    overflow: hidden;
-}
-
-ul#home_menu li a img {
-    border-radius: 6px;
-    overflow: hidden;
-}
-
-ul#home_menu li:last-child {
-    margin: 0;
-}
 
 
 /* =====================================
@@ -180,29 +133,20 @@ ul#home_menu li:last-child {
    ===================================== */
 
 #page_inner {
-    height: 582px;
+    height: 616px;
     background: url(../img/inner_bg.jpg) no-repeat center center;
     position: relative;
-    padding: 0 7px 0 11px;
 }
 
-#inner_menu {
-    width: 778px;
-    height: 30px;
-    background: gray;
-    opacity: 0.3;
-    position: absolute;
-    top: 106px;
-}
 /* =====================================
    Sketch Design
    ===================================== */
 
 #templateImageSelect {
     position: absolute;
-    top: 178px;
-
+    left: 50%;
 }
+
 #templateImageSelect .templ{
     height:20px;
     width: 20px;
@@ -216,6 +160,7 @@ ul#home_menu li:last-child {
 #templateImageSelect .templ.active {
     border: #b6272e solid 2px;
 }
+
 .imageTemplateRadio {
     display: none;
 }
@@ -237,62 +182,77 @@ ul#home_menu li:last-child {
 .imageTemplateLabel img {
     display: block;
 }
-
-.editorColor, .editorAction {
-    display: block;
-    width: 21px;
-    height: 21px;
-    margin: 0;
-    padding: 0;
-    border: #ddd solid 1px;
-    cursor: pointer;
-    background: white;
-}
-
-.editorTools, #editor {
-    float: right;
-}
-
-.editorAction span.ui-icon {
-    font-size: 12px;
-    line-height: 21px;
-    width: 16px;
-    height: 16px;
-    display: block;
-    margin: 0 auto;
-}
-.penAction {
-    cursor: pointer;
-    float: right;
-    width: 89px;
-    height: 16px;
-    text-align: center;
-    border: black solid 1px;
-}
-.penAction span.ui-icon {
-    font-size: 12px;
-    line-height: 16px;
-    width: 16px;
-    height: 16px;
-    display: block;
-    margin: 0 auto;
-}
-.editorColor#colorRed { background: red;}
-.editorColor#colorBlack { background: black;}
-.editorColor#colorBlue { background: blue;}
-.editorColor#colorGreen { background: green;}
-.editorColor#colorGray { background: gray;}
-
-
-.templatePreview {
-    width: 774px;
-    height: 157px; 
-    background: #fff;
+.templatePreview #editor {
     position: absolute;
-    border-radius: 6px;
-    border: white solid 2px;
-    top: 371px;
+    top: 22px;
+    right: 51px;
+    width: 330px;
+    height: 220px;
+    direction:ltr; 
+    border: #333 solid 1px;
+}
+.templatePreview #editor.true{
+    z-index: 3;
+    background: rgba(255, 255, 255, 0.6);
+}
+.templatePreview #editor.false{
+    z-index: 2;
+}
+
+.templatePreview #imageTextInput{
+    position: absolute;
+    top: 40px;
+    right: 74px;
+    width: 274px;
+    height: 174px;
+    resize: none;
+    z-index: 4;
+    background: transparent;
+    color: white;
+}
+.templatePreview #imageTextInput.true {
+    border-style: dashed;
+    border-width: 6px;
+    z-index: 3;
+}
+.templatePreview #imageTextInput.true.tpl1, 
+.templatePreview #imageTextInput.tpl1,
+.templatePreview #imageTextInput.tpl1::-webkit-input-placeholder{
+    border-color: black;
+    color: black;
+}
+.templatePreview #imageTextInput.true.tpl2, 
+.templatePreview #imageTextInput.tpl2,
+.templatePreview #imageTextInput.tpl2::-webkit-input-placeholder{
+    border-color: white;
+    color: white;
+}
+.templatePreview #imageTextInput.true.tpl3, 
+.templatePreview #imageTextInput.tpl3,
+.templatePreview #imageTextInput.tpl3::-webkit-input-placeholder{
+    border-color: black;
+    color: black;
+}
+.templatePreview #imageTextInput.false{
+    border: transparent 6px dashed;
+    z-index: 2;
+}
+.templatePreview #imageTextInput::-webkit-input-placeholder {
+    text-align: center;
+    line-height: 174px;
+}
+.templatePreview #imageTextInput.false::-webkit-input-placeholder {
+    color: transparent;
+}
+.templatePreview {
+    position: absolute;
     overflow: hidden;
+    left: 47px;
+    top: 118px;
+    width: 651px;
+    height: 240px;
+    background: transparent url(../img/templ_bg.png) no-repeat center center;
+    padding: 12px 13px 11px 13px;
 }
 
 .templatePreview .templateImagePreview { position: absolute; z-index: 1;}
@@ -301,6 +261,42 @@ ul#home_menu li:last-child {
 .templatePreview .templateSketchPreview *:hover {cursor: move;}
 .templatePreview .templateTextPreview { position: absolute; z-index: 3; border: transparent solid 1px; font-size: 26px; font-weight: bold; font-family: arial,helvetica; padding: 0 6px 0 0;}
 .templatePreview .templateTextPreview:hover { border: blue dotted 1px; cursor: move;}
+
+
+#next_step1 {
+    position: absolute;
+    border: none;
+    left: 0px;
+    background: red;
+    color: white;
+    display: block;
+    height: 20px;
+    padding: 0 6px;
+    border-radius: 6px;
+    text-align: center;
+}
+
+#modeSelect {
+    position: absolute;
+    right: 0px;
+    cursor: pointer;
+    border-radius: 6px;
+    overflow: hidden;
+    height: 20px;
+    line-height: 20px;
+    background: red;
+    color: white;
+    padding: 0 6px;
+    text-align: center;
+}
+
+.steps {
+    position: absolute;
+    top: 390px;
+    width: 677px;
+    left: 47px;
+    height: 141px;
+}
 
 
 
