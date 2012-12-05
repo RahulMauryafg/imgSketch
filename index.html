@@ -4,7 +4,7 @@
 	<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
 	<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
 	<!--[if gt IE 8]><!-->
-	<html class="no-js" ng-app="sketchApp">
+	<html class="no-js" ng-app="sketchApp" ng-controller="MainCtrl">
 	<!--<![endif]-->
 	<head>
 		<meta charset="utf-8" lang="he-IL">
@@ -24,11 +24,23 @@
 		<script src="js/vendor/modernizr-2.6.2.min.js"></script>
 	</head>
 	<body>
+		<!-- <div id="fb-root"></div> -->
+		<script>
+			// window.fbAsyncInit = function() {
+			// 	FB.init({appId : '303869856392125', channelUrl: '//localhost:8080/channel.html', status : true, cookie : true, xfbml : true});
+			// };
+			// (function(d, debug){
+			// var js, id = 'facebook-jssdk', ref = d.getElementsByTagName('script')[0];
+			// if (d.getElementById(id)) {return;}
+			// js = d.createElement('script'); js.id = id; js.async = true;
+			// js.src = "//connect.facebook.net/en_US/all" + (debug ? "/debug" : "") + ".js";
+			// ref.parentNode.insertBefore(js, ref);
+			// }(document, /*debug*/ false));
+		</script>
 		<!--[if lt IE 7]>
 		<p class="chromeframe">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> or <a href="http://www.google.com/chromeframe/?redirect=true">activate Google Chrome Frame</a> to improve your experience.</p>
 		<![endif]-->
 
-		<!-- Add your site or application content here -->
 		<div ng-view id="wrapper"></div>
 
 		<script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
@@ -42,9 +54,6 @@
 		<script src="js/controllers.js"></script>
 		<script src="js/vendor/raphael.min.js"></script>
 		<script src="js/vendor/raphael.sketchpad.js"></script>
-
-
-		<!-- Google Analytics: change UA-XXXXX-X to be your site's ID. -->
 		<script>
 			var _gaq=[['_setAccount','UA-XXXXX-X'],['_trackPageview']];
 			(function(d,t){var g=d.createElement(t),s=d.getElementsByTagName(t)[0];

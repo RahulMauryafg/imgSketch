@@ -136,6 +136,7 @@ html, body {
     height: 616px;
     background: url(../img/inner_bg.jpg) no-repeat center center;
     position: relative;
+    color: white;
 }
 
 /* =====================================
@@ -185,7 +186,7 @@ html, body {
 .templatePreview #editor {
     position: absolute;
     top: 22px;
-    right: 51px;
+    left: 296px;
     width: 330px;
     height: 220px;
     direction:ltr; 
@@ -202,40 +203,46 @@ html, body {
 .templatePreview #imageTextInput{
     position: absolute;
     top: 40px;
-    right: 74px;
+    left: 320px;
     width: 274px;
     height: 174px;
     resize: none;
     z-index: 4;
     background: transparent;
-    color: white;
+    color: black;
+    text-align: center;
+    line-height: 58px;
+    font-size: 41px;
+    overflow: hidden;
 }
 .templatePreview #imageTextInput.true {
     border-style: dashed;
     border-width: 6px;
+    color: black;
+    border-color: black;
     z-index: 3;
 }
 .templatePreview #imageTextInput.true.tpl1, 
-.templatePreview #imageTextInput.tpl1,
-.templatePreview #imageTextInput.tpl1::-webkit-input-placeholder{
-    border-color: black;
-    color: black;
+.templatePreview #imageTextInput.tpl1{
+    font-family: 'ghaim';
 }
 .templatePreview #imageTextInput.true.tpl2, 
-.templatePreview #imageTextInput.tpl2,
-.templatePreview #imageTextInput.tpl2::-webkit-input-placeholder{
-    border-color: white;
-    color: white;
+.templatePreview #imageTextInput.tpl2{
+    font-family: 'ghaim';
 }
 .templatePreview #imageTextInput.true.tpl3, 
-.templatePreview #imageTextInput.tpl3,
+.templatePreview #imageTextInput.tpl3{
+    font-family: 'ghaim';
+}
+.templatePreview #imageTextInput.tpl1::-webkit-input-placeholder,
+.templatePreview #imageTextInput.tpl2::-webkit-input-placeholder, 
 .templatePreview #imageTextInput.tpl3::-webkit-input-placeholder{
-    border-color: black;
     color: black;
 }
 .templatePreview #imageTextInput.false{
     border: transparent 6px dashed;
     z-index: 2;
+    color: black;
 }
 .templatePreview #imageTextInput::-webkit-input-placeholder {
     text-align: center;
@@ -298,6 +305,20 @@ html, body {
     height: 141px;
 }
 
+
+/* =====================================
+   Gallery
+   ===================================== */
+
+#galleryWrapper {
+    width: 673px;
+    height: 330px;
+    overflow: hidden;
+    position: absolute;
+    top: 115px;
+    left: 54px;
+    outline:red solid 1px;
+}
 
 
    /* ==========================================================================

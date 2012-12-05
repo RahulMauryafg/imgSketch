@@ -9,6 +9,13 @@ function MainCtrl($scope, $route, $routeParams, $location) {
 	$scope.$location = $location;
 	$scope.$routeParams = $routeParams;
 	$scope.route = $route;
+	$scope.settings = {
+		development: false,
+		fb: false,
+		gallery: {
+			perPage: 4
+		}
+	}
 }
 
 /*
@@ -24,6 +31,27 @@ function GeneralCtrl($scope,$resource){
 		$scope.currentTemplate = $scope.settings.templates[0];
 		$scope.Api = $resource($scope.settings.host + 'api/:action', {});
 		$scope.Rest = $resource($scope.settings.host + 'resources/:collection/:id', {});
+		$scope.formData = {
+			payload: {
+				imageText: {posX: 320, posY: 28, width:"290", height:"190" },
+				imageTemplate: $scope.currentTemplate.id,
+				imageData: {posX: 283, posY: 10, width: "330", height: "220", data: ''}
+			},
+			user: {
+				fbUid: 0,
+				name: 'first last',
+				phone: '0501234567',
+				email: 'mail@domain.com',
+				street: 'defaultstreet',
+				city: 'city',
+				zip: '12345',
+				houseNumber: '1',
+				apartmentNumber: '1a'
+			},
+			order: {
+				type: 'Shirt'
+			}
+		};
 	});
 
 	$scope.sketchpad = Raphael.sketchpad("editor", {
@@ -39,17 +67,6 @@ function GeneralCtrl($scope,$resource){
 			$("#sketchData").val('').trigger('input').trigger('change');
 	});
 
-	$scope.formData = {
-		payload: {
-			imageText: {posX: 0, posY: 0 },
-			imageTemplate: 0
-		},
-		user: {
-		},
-		order: {
-		}
-	};
-
 	$scope.imageData = {};
 	$scope.currentStep = 1;
 	$scope.toggleDraw = false;
@@ -58,7 +75,9 @@ function GeneralCtrl($scope,$resource){
 	//Form flow controls
 	$scope.selectTemplate = function (index) {
 		$scope.currentTemplate = angular.copy($scope.settings.templates[index]);
+		$scope.formData.payload.imageTemplate = $scope.currentTemplate.id;
 	};
+
 	$scope.step = function(step){
 		$scope.currentStep = step;
 		if (step >= 2){
@@ -74,52 +93,105 @@ function GeneralCtrl($scope,$resource){
 		return (step === $scope.currentStep);
 	}
 
+	$scope.order = function(type){
+		if (type != undefined && type === 'dl'){
+			$scope.formData.order.type = 'FacebookCover';
+		}
+		if ($scope.settings.fb) {
+			$('#loginDialog').dialog('open');	
+		} else {
+			$('#orderDialog').dialog('open');
+		}
+	}
+
 	$scope.toggleEditMode = function(){
 		$scope.toggleDraw = !$scope.toggleDraw;
 		$scope.toggleText = !$scope.toggleText;
 		$scope.sketchpad.editing($scope.toggleDraw);
 	}
-
-	//submit controls
-	$scope.sendImage = function(){
-		_obj.token = $scope.user.token;
-		$scope.Rest.save({collection: 'image'}, _obj, function(response){
-			//$('#imageDialog').dialog('open');
-		});
-	};
 }
 
-function UserCtrl($scope, $resource) {
-	$scope.loginData = {};
-	$scope.registerData = {};
-	$scope.error = false;
-	$scope.login = function () {
-		//$scope.loginData.password = jQuery.sha1($scope.loginData.password);
-		$scope.Api.save({action: 'login'}, $scope.loginData, function (response) {
-			if (response.error) {
-				$scope.error = true;
-				$scope.errorMsg = response.description;
-				return;
-			}
-			$scope.$emit('loginUser', response);
-		});
-	};
+function LoginCtrl($scope, $resource) {
+	$scope.updateUser = function(){
+		//update user
+		$scope.order();
+	}
+	$scope.order = function(type){
+		$('#loginDialog').dialog('close');
+		$('#orderDialog').dialog('open');
+	}
+}
 
-	$scope.registerData = {};
-	$scope.register = function () {
-		console.log($scope.registerData);
-		$scope.Rest.save({collection: 'user'}, $scope.registerData, function (response) {
-			console.log(response);
-		});
+
+function GalleryCtrl($scope, $resource) {
+	$scope.currentImage = {};
+	$scope.Gallery = $resource('//gi.mediamagic.co.il/clients/avoda/printingCreator/resources/images', {});
+	$scope.gallery = $scope.Gallery.query(function(r){
+		$scope.gallery = r;
+		$scope.galleryData = {
+			total: r.length,
+			pages: Math.ceil(r.length/$scope.settings.gallery.perPage),
+			currentPage: 1,
+			startIndex: 0,
+			endIndex: $scope.settings.gallery.perPage
+		}
+		$scope.getCurrentSet($scope.galleryData.currentPage);
+	});
+
+	$scope.zoom = function(index){
+		$scope.currentImage = $scope.currentSet[index];
+		$('#galleryDialog').dialog('open');
+	}
+
+	$scope.page = function(action){
+		if (action === 'next' && $scope.galleryData.currentPage < $scope.galleryData.pages)
+			$scope.galleryData.currentPage++;
+		if (action === 'prev' && $scope.galleryData.currentPage > 1)
+			$scope.galleryData.currentPage--;
+		$scope.getCurrentSet($scope.galleryData.currentPage);
+	}
+
+	$scope.getCurrentSet = function(page){
+		var newStartindex = (page-1)*$scope.settings.gallery.perPage;
+		$scope.currentSet = $scope.gallery.slice(newStartindex,newStartindex + $scope.settings.gallery.perPage);
 	}
 }
 
 function paymentCtrl(){
 }
 
-function ImageCtrl($scope, $resource) {
-}
 
-function GalleryCtrl($scope, $resource) {
+function OrderCtrl($scope){
+	$scope.downloadUrl = null;
+	$scope.showSizes = function(){
 
+		if ($scope.formData != undefined && $scope.formData.order.type === 'Shirt') {
+			return false;
+		} else {
+			return true;
+		}
+	}
+	$scope.register = function(){
+		if ($scope.development == false) {
+			$scope.Rest.save({collection: 'order'}, $scope.formData, function(response){
+				if ($scope.formData.order.type === 'FacebookCover')
+					$scope.downloadUrl = response.downloadUrl;
+				$('#orderDialog').dialog('close');
+				$('#thankyouDialog').dialog('open');
+			});
+		}
+		else {
+			console.log($scope.formData);
+			$('#orderDialog').dialog('close');
+			$('#thankyouDialog').dialog('open');
+		}
+	}
+
+	$scope.checkOrderType = function(){
+		if ($scope.formData != undefined && $scope.formData.order.type == 'FacebookCover'){
+			return true;
+		} else {
+			return false;
+		}
+	}
 }

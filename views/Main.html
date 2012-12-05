@@ -6,10 +6,21 @@
 		<input type="text" ng-hide="true" name="textTop" ng-model="formData.payload.imageText.posY" id="textTop" />
 		<input type="text" ng-hide="true" name="textLeft" ng-model="formData.payload.imageText.posX" id="textLeft" />
 		<input type="text" ng-hide="true" name="textHeight" ng-model="formData.payload.imageText.height" id="textHeight" />
-		<input type="text" ng-hide="true" name="textWidth" ng-model="formData.payload.imageText.width" id="textWidth" />	
+		<input type="text" ng-hide="true" name="textWidth" ng-model="formData.payload.imageText.width" id="textWidth" />
+		<style type="text/css">
+			@font-face {
+				font-family: ghaim;
+				src: url("fonts/GHAIM.eot");
+			}
+			@font-face {
+				font-family: ghaim;
+				src: url("fonts/GHAIM.ttf");
+			}
+		</style>
+		
 		<div class="templatePreview">
 			<textarea
-				class="{{!toggleText}} tpl{{currentTemplate.id}}"
+				class="area limited {{!toggleText}} tpl{{currentTemplate.id}}"
 				placeholder="enter text here"
 				name="imageText"
 				ng-model="formData.payload.imageText.text"
@@ -24,6 +35,7 @@
 				ng-src="{{settings.host}}{{currentTemplate.path}}" 
 				class="templateImagePreview" />
 		</div>
+		
 		<div id="step_1" ng-show="stepCheck(1)" class="steps">
 			<input
 				id="next_step1"
@@ -35,16 +47,15 @@
 				class="clearfix">
 				<div
 					ng-repeat="template in settings.templates"
-					ng-click="selectTemplate($index)"
 					class="templ">
 						<input
 							type="radio" 
 							name="imageTemplate"
 							value="{{template.id}}"
-							ng-model="formData.payload.imageTemplate"
 							class="imageTemplateRadio"
 							id="imageTemplate{{template.id}}"/>
 						<label
+							ng-click="selectTemplate($index)"
 							for="imageTemplate{{template.id}}"
 							class="imageTemplateLabel">{{$index+1}}
 						</label>
@@ -56,19 +67,25 @@
 				img {{toggleDraw}}
 			</div>
 		</div>
+
 		<div id="step_2" ng-show="stepCheck(2)" class="steps">
+			<div>
+				<input
+					type="radio"
+					name="orderType"
+					value="FacebookCover"
+					id="order_download"
+					style="visibility:hidden;"
+					ng-click="order('dl')"/>
+				<label
+					for="order_download">
+					Download
+				</label>
+			</div>
 			<input
 				type="radio"
 				name="orderType"
-				value="Download"
-				id="order_download"/>
-			<label
-				for="order_download">
-				Download
-			</label>
-			<input
-				type="radio"
-				name="orderType"
+				ng-model="formData.order.type"
 				value="Sticker"
 				id="order_sticker"/>
 			<label
@@ -78,6 +95,8 @@
 			<input
 				type="radio"
 				name="orderType"
+				value="Sign"
+				ng-model="formData.order.type"
 				id="order_sign"/>
 			<label
 				for="order_sign">
@@ -86,6 +105,8 @@
 			<input
 				type="radio"
 				name="orderType"
+				value="Shirt"
+				ng-model="formData.order.type"
 				id="order_shirt"/>
 			<label
 				for="order_shirt">
@@ -95,7 +116,7 @@
 				id="next_step2"
 				type="submit" 
 				value="המשך" 
-				ng-click="step(3)"/>
+				ng-click="order()"/>
 			<input
 				id="next_step2"
 				type="submit" 
@@ -103,101 +124,122 @@
 				ng-click="step(1)"/>
 		</div>
 	</form>
+	<a href="#/gallery">gallery</a>
+	<script src="js/main.js"></script>
+</div>
 
+<!-- DIALOGS -->
+<div>
 	<div 
 		id="loginDialog" 
-		ng-controller="UserCtrl" 
+		ng-controller="LoginCtrl" 
 		ui-jq="dialog" 
 		ui-options="{title:'please login',autoOpen: false, height: 310, width: 700, modal: true, resizable: false, show: 'slow'}">
-		<div id="loginWrapper" style="float:left; width: 331px; border-right: #333 solid 1px; height: 235px;">
-			<div style="width: 212px; margin: 0 auto;">
-				<div style="text-align: center;">login</div>
-				<form name="loginForm">
-					<input 
-						type="text" 
-						name="username" 
-						placeholder="username"
-						ng-model="loginData.email"/>
-					<input 
-						type="password" 
-						name="password" 
-						placeholder="password"
-						ng-model="loginData.password"/>
-					<div style="text-align: center;">
-						<button ng-click="login()">login</button>
-					</div>
-				</form>
-			</div>
-			<div style="width:174px; margin: 62px auto 0 auto;">
-				<span>login with facebook</span>
-				<button>facebook connect</button>
-			</div>
+		<div style="width:174px; margin: 62px auto 0 auto;">
+			<span>login with facebook</span>
+			<button>facebook connect</button>
+			<a ng-click="order()">skip</a>
 		</div>
-		<div id="registerWrapper" style="float:left; width: 332px; height: 235px;">
-			<div style="text-align: center;">register</div>
-			<div style="width: 212px; margin: 0 auto;">
-				<form name="registerForm">
-					<input 
-						type="text" 
-						name="firstName"
-						placeholder="first name"
-						ng-model="registerData.firstName"
-						required />
-					<input
-						type="text"
-						name="lastName"
-						placeholder="last name"
-						ng-model="registerData.lastName" 
-						required />
-					<input
-						type="number"
-						name="age"
-						placeholder="age"
-						ng-model="registerData.age"
-						min="0"
-						max="99"
-						ng-maxlength="2"
-						required />
-					<input
-						type="email"
-						name="email"
-						placeholder="email@domain.com"
-						ng-model="registerData.email"
-						required />
-					<input 
-						type="number"
-						name="phonePre"
-						placeholder="kidomet"
-						ng-model="registerData.phoneExt"
-						ng-maxLength="3"
-						required />
-					<input
-						type="number"
-						name="phone"
-						placeholder="number"
-						ng-model="registerData.phone"
-						ng-maxLength="7"
-						required />
-					<input
-						type="password"
-						name="password"
-						placeholder="password"
-						ng-model="registerData.password"
-						required />
-					<div style="text-align: center;">
-						<button ng-click="register()">register</button>
-					</div>
-				</form>
+	</div>
+</div>
+<div
+	ng-controller="OrderCtrl">
+	<div>
+		<div
+			id="orderDialog"
+			ui-jq="dialog"
+			ui-options="{title:'please register',autoOpen: false, height: 310, width: 700, modal: true, resizable: false, show: 'slow'}">
+			<div 
+				id="registerWrapper" 
+				style="float:left; width: 332px; height: 235px;">
+				<div 
+					style="text-align: center;">register</div>
+				<div 
+					style="width: 212px; margin: 0 auto;">
+					<form 
+						novalidate>
+						<div 
+							ng-hide="showSizes()">
+							<input 
+								type="radio" 
+								name="shirtSize" 
+								value="M" 
+								ng-model="formData.order.size" />
+							<input 
+								type="radio" 
+								name="shirtSize" 
+								value="L" 
+								ng-model="formData.order.size" />
+							<input 
+								type="radio" 
+								name="shirtSize" 
+								value="XL" 
+								ng-model="formData.order.size" />
+						</div>
+						<input 
+							type="text" 
+							name="name"
+							placeholder="first name"
+							ng-model="formData.user.name"
+							required />
+						<input
+							type="email"
+							name="email"
+							placeholder="email@domain.com"
+							ng-model="formData.user.email"
+							required />
+						<input
+							type="text"
+							name="phone"
+							placeholder="050-1234567"
+							ng-model="formData.user.phone"
+							ng-maxLength="10"
+							required />
+						<input 
+							type="text" 
+							name="street"
+							placeholder="street"
+							ng-model="formData.user.street" 
+							required />
+						<input 
+							type="text" 
+							name="city"
+							placeholder="street"
+							ng-model="formData.user.city" 
+							required />
+						<input 
+							type="text" 
+							name="zip"
+							placeholder="1234567"
+							maxlength="7"
+							ng-model="formData.user.zip"
+							required />
+						<input 
+							type="text" 
+							name="homenumber"
+							placeholder="number"
+							ng-model="formData.user.houseNumber" 
+							required />
+						<input 
+							type="text" 
+							name="appnumber"
+							placeholder="number"
+							ng-model="formData.user.apartmentNumber" />
+						<div style="text-align: center;">
+							<button ng-click="register()">register</button>
+						</div>
+					</form>
+				</div>
 			</div>
 		</div>
 	</div>
-
-	<div
-		id="imageDialog"
-		ui-jq="dialog"
-		ui-options="{title:'Image created',autoOpen:false,height: 310, width: 700, modal: true, resizable: false, show: 'slow'}">
-		<img ng-src="{{settings.host}}{{imageData.imagePath}}" width="580" heigth="190" />
+	<div>
+		<div
+			id="thankyouDialog"
+			ui-jq="dialog"
+			ui-options="{title:'please register',autoOpen: false, height: 310, width: 700, modal: true, resizable: false, show: 'slow'}">
+			<div ng-hide="checkOrderType()">Thank you</div>
+			<div ng-show="checkOrderType()">Thank you + download <a href="{{downloadUrl}}">link</a></div>
+		</div>
 	</div>
-
-	<script src="js/main.js">
 </div>
