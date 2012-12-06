@@ -28,3 +28,49 @@
 // 	console.log(virtualKeys);
 // 	console.log(totalKeys);
 // });
+
+
+// var countChars = 0;
+// function checkLimits(txtArea,countChars,kc) {
+// 	var lh = 58;
+// 	var fs = 42;
+// 	var dh = Math.round((lh/fs)*100)/100;
+// 	if(!txtArea.css('line-height') || !txtArea.css('height')) {
+// 		txtArea.css('line-height', lh);
+// 		if(txtArea.attr('rows') == txtArea.attr("maxRows"))
+// 			txtArea.css('height', Math.ceil((fs * txtArea.attr('rows') * dh)+((fs*200)/300)));
+// 		else
+// 			txtArea.css('height', Math.ceil((fs * txtArea.attr('rows') * dh)+((fs*100)/300)));
+// 	}
+// 	var exceedMsg = "";
+// 	var maxLines = txtArea.attr("maxRows");
+// 	var maxHeight = Math.ceil((fs * maxLines * dh)+((fs*200)/300));
+// 	var maxChars = 30;
+// 	if(txtArea.attr("maxChars") != 0 && txtArea.attr("maxChars") < maxLines * txtArea.attr('cols'))
+// 		var maxChars = txtArea.attr("maxChars");
+// 	else  
+// 		var maxChars = maxLines * txtArea.attr('cols');
+// 	$(txtArea.attr("name") + '_maxChars').val(maxChars);
+// 	$(txtArea.attr("name") + '_maxLines').val(maxLines);
+// 	countChars = txtArea.val().length;
+// 	if(txtArea.val().length > maxChars || txtArea.scrollHeight > maxHeight)	{ 
+// 		while (txtArea.val().length > maxChars && txtArea.scrollHeight <= maxHeight) {
+// 			txtArea.val(txtArea.val().substr(0,txtArea.val().length-1));
+// 			exceedMsg = "chars limit exceeded";
+// 		} 
+// 		while(txtArea.scrollHeight > maxHeight) {
+// 			txtArea.val(txtArea.val().substr(0,txtArea.val().length-3));
+// 			exceedMsg = "lines limit exceeded";
+// 		}
+// 	}
+// 	if(exceedMsg != "" && (kc != 8 && kc != 46)) 
+// 		console.log(exceedMsg);
+// 	countChars = txtArea.val().length;
+// }
+
+// $('#imageTextInput').live('keyup', function(e) {
+// 	var txtArea = $(this);
+// 	var charsCountfield = 0;
+// 	var kc = e.keyCode;
+// 	checkLimits(txtArea,countChars,kc);
+// });

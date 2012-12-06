@@ -1,4 +1,28 @@
-<div id="page_inner">
+<script>
+	$('#galleryDialog').dialog('destroy');
+	$('#imageTextInput').die('keyup paste').live('keyup paste', function (e) {
+        $(this).val($(this).val().replace(/([^ 0-9א-ת!?.,\n\r])/g, "")).trigger('change');
+        var rows = $(this).val().split('\n');
+        for(var i=0; i<rows.length;i++){
+        	if (rows[i].length > 9){
+        		if (rows.length < 3)
+        			rows[i] = rows[i].substr(0,9) + '\n';
+        		else
+        			rows[i] = rows[i].substr(0,9);
+        	}
+        }
+        var newRows = [];
+        if (rows[0] != undefined && rows.length > 0)
+        	newRows[0] = rows[0];
+        if (rows[1] != undefined && rows.length > 1)
+        	newRows[1] = rows[1];
+        if (rows[2] != undefined && rows.length > 2)
+        	newRows[2] = rows[2];
+        $(this).val(newRows.join('\n'));
+    });
+</script>
+<link rel="stylesheet" href="css/sketch.css">
+<div id="page_inner" class="{{config.school}}">
 	<form novalidate name="imageForm">
 		<input type="text" ng-hide="true" name="sketchData" ng-model="formData.payload.imageData.data" id="sketchData"/>
 		<input type="text" ng-hide="true" name="sketchTop" ng-model="formData.payload.imageData.posY" id="sketchTop" />
@@ -16,16 +40,75 @@
 				font-family: ghaim;
 				src: url("fonts/GHAIM.ttf");
 			}
+			@font-face {
+			    font-family: 'aduma';
+			    src: url('fonts/aduma-light-webfont.eot');
+			    src: url('fonts/aduma-light-webfont.eot?#iefix') format('embedded-opentype'),
+			         url('fonts/aduma-light-webfont.woff') format('woff'),
+			         url('fonts/aduma-light-webfont.ttf') format('truetype'),
+			         url('fonts/aduma-light-webfont.svg#adumalight') format('svg');
+			    font-weight: 300;
+			    font-style: normal;
+			}
+
+			@font-face {
+			    font-family: 'aduma';
+			    src: url('fonts/aduma-regular-webfont.eot');
+			    src: url('fonts/aduma-regular-webfont.eot?#iefix') format('embedded-opentype'),
+			         url('fonts/aduma-regular-webfont.woff') format('woff'),
+			         url('fonts/aduma-regular-webfont.ttf') format('truetype'),
+			         url('fonts/aduma-regular-webfont.svg#adumaregular') format('svg');
+			    font-weight: 400;
+			    font-style: normal;
+			}
+
+			@font-face {
+			    font-family: 'aduma';
+			    src: url('fonts/aduma-medium-webfont.eot');
+			    src: url('fonts/aduma-medium-webfont.eot?#iefix') format('embedded-opentype'),
+			         url('fonts/aduma-medium-webfont.woff') format('woff'),
+			         url('fonts/aduma-medium-webfont.ttf') format('truetype'),
+			         url('fonts/aduma-medium-webfont.svg#adumamedium') format('svg');
+			    font-weight: 500;
+			    font-style: normal;
+			}
+
+			@font-face {
+			    font-family: 'aduma';
+			    src: url('fonts/aduma-bold-webfont.eot');
+			    src: url('fonts/aduma-bold-webfont.eot?#iefix') format('embedded-opentype'),
+			         url('fonts/aduma-bold-webfont.woff') format('woff'),
+			         url('fonts/aduma-bold-webfont.ttf') format('truetype'),
+			         url('fonts/aduma-bold-webfont.svg#adumabold') format('svg');
+			    font-weight: 700;
+			    font-style: normal;
+			}
+
+			@font-face {
+			    font-family: 'aduma';
+			    src: url('fonts/aduma-heavy-webfont.eot');
+			    src: url('fonts/aduma-heavy-webfont.eot?#iefix') format('embedded-opentype'),
+			         url('fonts/aduma-heavy-webfont.woff') format('woff'),
+			         url('fonts/aduma-heavy-webfont.ttf') format('truetype'),
+			         url('fonts/aduma-heavy-webfont.svg#adumaheavy') format('svg');
+			    font-weight: 900;
+			    font-style: normal;
+			}
 		</style>
 		
+		<div id="templateHeader" style="font-size: 30px; position: absolute; top: 80px; right: 57px; ">1.עצבו את המסר שלכם:</div>
+		<div id="templateLink"></div>
 		<div class="templatePreview">
 			<textarea
 				class="area limited {{!toggleText}} tpl{{currentTemplate.id}}"
-				placeholder="enter text here"
+				placeholder="טקסט"
 				name="imageText"
 				ng-model="formData.payload.imageText.text"
 				ng-disabled="toggleText"
-				id="imageTextInput">
+				id="imageTextInput"
+				maxRows="3"
+				maxChars="30"
+				required>
 			</textarea>
 			<div
 				id="editor"
@@ -38,10 +121,12 @@
 		
 		<div id="step_1" ng-show="stepCheck(1)" class="steps">
 			<input
+				class="button_next"
 				id="next_step1"
 				type="submit" 
-				value="המשך" 
-				ng-click="step(2)"/>
+				value="&nbsp;" 
+				ng-click="step(2)"
+				ng-disabled="imageForm.$invalid"/>
 			<div
 				id="templateImageSelect"
 				class="clearfix">
@@ -57,14 +142,29 @@
 						<label
 							ng-click="selectTemplate($index)"
 							for="imageTemplate{{template.id}}"
-							class="imageTemplateLabel">{{$index+1}}
+							class="imageTemplateLabel button_number">{{$index+1}}
 						</label>
 				</div>
+				<div style="float: left; height: 30px; line-height: 30px;">החלפת רקע: </div>
 			</div>
-			<div
-				id="modeSelect"
-				ng-click="toggleEditMode()">
-				img {{toggleDraw}}
+			<div id="editTools">
+				<label>עריכה:</label>
+				<div
+					class="button_edit_draw"
+					id="drawSelect"
+					ng-click="toggleEditMode('draw')">
+				</div>
+				<div
+					class="button_edit_text"
+					id="textSelect"
+					ng-click="toggleEditMode('text')">
+				</div>
+				<div
+					class="button_number"
+					id="clearDraw"
+					ng-click="clearDraw()">
+					X
+				</div>
 			</div>
 		</div>
 
@@ -107,24 +207,24 @@
 				name="orderType"
 				value="Shirt"
 				ng-model="formData.order.type"
-				id="order_shirt"/>
+				id="order_shirt" checked/>
 			<label
 				for="order_shirt">
 				Shirt
 			</label>
 			<input
+				class="button_next"
 				id="next_step2"
 				type="submit" 
 				value="המשך" 
 				ng-click="order()"/>
 			<input
-				id="next_step2"
+				id="next_step1"
 				type="submit" 
 				value="ערוך" 
 				ng-click="step(1)"/>
 		</div>
 	</form>
-	<a href="#/gallery">gallery</a>
 	<script src="js/main.js"></script>
 </div>
 
@@ -134,7 +234,7 @@
 		id="loginDialog" 
 		ng-controller="LoginCtrl" 
 		ui-jq="dialog" 
-		ui-options="{title:'please login',autoOpen: false, height: 310, width: 700, modal: true, resizable: false, show: 'slow'}">
+		ui-options="{title:'',autoOpen: false, height: 271, width: 532, modal: true, resizable: false, draggable: false, position: ['center', 110]}">
 		<div style="width:174px; margin: 62px auto 0 auto;">
 			<span>login with facebook</span>
 			<button>facebook connect</button>
@@ -148,85 +248,116 @@
 		<div
 			id="orderDialog"
 			ui-jq="dialog"
-			ui-options="{title:'please register',autoOpen: false, height: 310, width: 700, modal: true, resizable: false, show: 'slow'}">
+			ui-options="{title:'',autoOpen: false, height: 271, width: 532, modal: true, resizable: false, draggable: false, position: ['center', 110]}">
 			<div 
-				id="registerWrapper" 
-				style="float:left; width: 332px; height: 235px;">
+				id="orderWrapper">
 				<div 
-					style="text-align: center;">register</div>
-				<div 
-					style="width: 212px; margin: 0 auto;">
-					<form 
+					class="orderTitle">לקבלת המסר שעיצבת השלם את הפרטים הבאים:
+				</div>
+				<div>
+					<form name="orderForm"
 						novalidate>
+						<label>המסר שלך יודפס על: חולצה</label>
 						<div 
 							ng-hide="showSizes()">
-							<input 
-								type="radio" 
-								name="shirtSize" 
-								value="M" 
-								ng-model="formData.order.size" />
-							<input 
-								type="radio" 
-								name="shirtSize" 
-								value="L" 
-								ng-model="formData.order.size" />
-							<input 
-								type="radio" 
-								name="shirtSize" 
-								value="XL" 
-								ng-model="formData.order.size" />
+							<label>בחר מידה: </label>
+							<div style="direction: ltr; display: inline-block;">
+								<label for="size_XL">XL</label>
+								<input 
+									id="size_XL"
+									type="radio" 
+									name="shirtSize" 
+									value="XL" 
+									ng-model="formData.order.size" />
+								<label for="size_L">L</label>
+								<input 
+									id="size_L"
+									type="radio" 
+									name="shirtSize" 
+									value="L" 
+									ng-model="formData.order.size" />
+								<label for="size_M">M</label>
+								<input 
+									id="size_M"
+									type="radio" 
+									name="shirtSize" 
+									value="M" 
+									ng-model="formData.order.size" checked />
+							</div>
 						</div>
-						<input 
-							type="text" 
-							name="name"
-							placeholder="first name"
-							ng-model="formData.user.name"
-							required />
-						<input
-							type="email"
-							name="email"
-							placeholder="email@domain.com"
-							ng-model="formData.user.email"
-							required />
-						<input
-							type="text"
-							name="phone"
-							placeholder="050-1234567"
-							ng-model="formData.user.phone"
-							ng-maxLength="10"
-							required />
-						<input 
-							type="text" 
-							name="street"
-							placeholder="street"
-							ng-model="formData.user.street" 
-							required />
-						<input 
-							type="text" 
-							name="city"
-							placeholder="street"
-							ng-model="formData.user.city" 
-							required />
-						<input 
-							type="text" 
-							name="zip"
-							placeholder="1234567"
-							maxlength="7"
-							ng-model="formData.user.zip"
-							required />
-						<input 
-							type="text" 
-							name="homenumber"
-							placeholder="number"
-							ng-model="formData.user.houseNumber" 
-							required />
-						<input 
-							type="text" 
-							name="appnumber"
-							placeholder="number"
-							ng-model="formData.user.apartmentNumber" />
-						<div style="text-align: center;">
-							<button ng-click="register()">register</button>
+						<div class="order_inputs">
+							<label style="width: 65px;">שם המזמין:</label>
+							<input 
+								style="width: 116px; margin-left: 12px;"
+								type="text" 
+								name="name"
+								placeholder="שם מלא"
+								ng-model="formData.user.name"
+								required />
+							<label style="width: 45px;">טלפון:</label>
+							<input
+								style="width: 124px;"
+								type="text"
+								name="phone"
+								placeholder="050-1234567"
+								ng-model="formData.user.phone"
+								ng-maxLength="10"
+								required />
+						</div>
+						<div class="order_inputs">
+							<label style="width: 44px;">דוא"ל:</label>
+							<input
+								style="width: 137px; margin-left: 10px;"
+								type="email"
+								name="email"
+								placeholder="email@domain.com"
+								ng-model="formData.user.email"
+								required />
+							<label style="width: 35px;">עיר:</label>
+							<input 
+								style="width: 136px;"
+								type="text" 
+								name="city"
+								placeholder="עיר מגורים"
+								ng-model="formData.user.city" 
+								required />
+						</div>
+						<div class="order_inputs">
+							<label style="width: 30px;">רחוב:</label>
+							<input 
+								style="width: 65px; margin-left: 4px;"
+								type="text" 
+								name="street"
+								placeholder="שם רחוב"
+								ng-model="formData.user.street" 
+								required />
+							<label style="width: 45px;">מס' בית:</label>
+							<input
+								style="width:17px; margin-left: 4px;"
+								type="text" 
+								name="homenumber"
+								placeholder=""
+								ng-model="formData.user.houseNumber" 
+								required />
+							<label style="width: 51px;">מס' דירה:</label>
+							<input
+								style="width: 17px; margin-left: 8px;"
+								type="text" 
+								name="appnumber"
+								placeholder=""
+								ng-model="formData.user.apartmentNumber" />
+							<label style="width: 36px;">מיקוד:</label>
+							<input
+								style="width: 45px;"
+								type="text" 
+								name="zip"
+								placeholder=""
+								maxlength="7"
+								ng-model="formData.user.zip"
+								required />
+						</div>
+						<div style="text-align: left;" class="clearfix">
+							<button ng-click="register()" class="button_next" ng-disabled="orderForm.$invalid">&nbsp;</button>
 						</div>
 					</form>
 				</div>
@@ -237,9 +368,15 @@
 		<div
 			id="thankyouDialog"
 			ui-jq="dialog"
-			ui-options="{title:'please register',autoOpen: false, height: 310, width: 700, modal: true, resizable: false, show: 'slow'}">
-			<div ng-hide="checkOrderType()">Thank you</div>
-			<div ng-show="checkOrderType()">Thank you + download <a href="{{downloadUrl}}">link</a></div>
+			ui-options="{title:'',autoOpen: false, height: 271, width: 532, modal: true, resizable: false, draggable: false, position: ['center', 110]}">
+			<div ng-hide="checkOrderType()" id="thankyouWrapper">
+				<div class="thankyouTitle">
+					תודה בקשתכם התקבלה.
+				</div>
+				<div ng-show="checkOrderType()">
+					Thank you + download <a href="{{downloadUrl}}">link</a>
+				</div>
+			</div>
 		</div>
 	</div>
 </div>

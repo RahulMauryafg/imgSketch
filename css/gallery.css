@@ -1,0 +1,42 @@
+#galleryWrapper {
+    width: 673px;
+    height: 330px;
+    overflow: hidden;
+    position: absolute;
+    top: 115px;
+    left: 54px;
+}
+
+.galleryImage {
+	width: 295px;
+	height: 109px;
+	padding: ;
+	background: url(../img/galleryTpl_bg.png) no-repeat center center;
+	padding: 5px 12px 13px 6px;
+}
+
+.galleryImage.img_0 {
+	position: absolute;
+	top: 0;
+	right: 0;
+}
+
+.galleryImage.img_1 {
+	position: absolute;
+	top: 0;
+	left: 0;
+}
+
+.galleryImage.img_2{
+	position: absolute;
+	bottom: 0;
+	right: 0;
+}
+
+.galleryImage.img_3{
+	position: absolute;
+	bottom: 0;
+	left: 0;
+}
+
+

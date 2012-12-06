@@ -9,13 +9,23 @@ function MainCtrl($scope, $route, $routeParams, $location) {
 	$scope.$location = $location;
 	$scope.$routeParams = $routeParams;
 	$scope.route = $route;
-	$scope.settings = {
+	$scope.config = {
+		production: false,
+		hosts: {
+			dev: '//gi.mediamagic.co.il/clients/avoda/printingCreator',
+			production: '//212.29.200.117'
+		},
+		school: true,
 		development: false,
 		fb: false,
+		selectType: false,
+		defaultType: 'Shirt',
+		defaultSize: 'M',
 		gallery: {
 			perPage: 4
 		}
 	}
+	$scope.host = ($scope.config.production) ? $scope.config.hosts.production : $scope.config.hosts.dev;
 }
 
 /*
@@ -25,7 +35,7 @@ function MainCtrl($scope, $route, $routeParams, $location) {
 
 function GeneralCtrl($scope,$resource){
 	//Constructor
-	$scope.Settings = $resource('//gi.mediamagic.co.il/clients/avoda/printingCreator/resources/settings', {});
+	$scope.Settings = $resource($scope.host + '/resources/settings', {});
 	$scope.settings = $scope.Settings.get(function(r){ 
 		$scope.settings = r;
 		$scope.currentTemplate = $scope.settings.templates[0];
@@ -39,19 +49,25 @@ function GeneralCtrl($scope,$resource){
 			},
 			user: {
 				fbUid: 0,
-				name: 'first last',
-				phone: '0501234567',
-				email: 'mail@domain.com',
-				street: 'defaultstreet',
-				city: 'city',
-				zip: '12345',
-				houseNumber: '1',
-				apartmentNumber: '1a'
+				name: '',
+				phone: '',
+				email: '',
+				street: '',
+				city: '',
+				zip: '',
+				houseNumber: '',
+				apartmentNumber: ''
 			},
 			order: {
 				type: 'Shirt'
 			}
 		};
+		$scope.master = angular.copy($scope.formData);
+	});
+
+	$scope.$on('reset', function(){
+		$scope.formData = angular.copy($scope.master);
+		$scope.sketchpad.clear();
 	});
 
 	$scope.sketchpad = Raphael.sketchpad("editor", {
@@ -79,13 +95,19 @@ function GeneralCtrl($scope,$resource){
 	};
 
 	$scope.step = function(step){
-		$scope.currentStep = step;
-		if (step >= 2){
-			$scope.toggleDraw = false;
-			$scope.toggleText = true;
-			$scope.sketchpad.editing(false);
+		if ($scope.config.selectType === true) {
+			$scope.currentStep = step;
+			if (step >= 2){
+				$scope.toggleDraw = false;
+				$scope.toggleText = true;
+				$scope.sketchpad.editing(false);
+			} else {
+				$scope.toggleText = false;
+			}
 		} else {
-			$scope.toggleText = false;
+			$scope.formData.order.type = $scope.config.defaultType;
+			$scope.formData.order.size = $scope.config.defaultSize;
+			$scope.order($scope.formData.order.type);
 		}
 	}
 
@@ -97,23 +119,35 @@ function GeneralCtrl($scope,$resource){
 		if (type != undefined && type === 'dl'){
 			$scope.formData.order.type = 'FacebookCover';
 		}
-		if ($scope.settings.fb) {
+		if ($scope.config.fb) {
 			$('#loginDialog').dialog('open');	
 		} else {
 			$('#orderDialog').dialog('open');
 		}
 	}
 
-	$scope.toggleEditMode = function(){
-		$scope.toggleDraw = !$scope.toggleDraw;
-		$scope.toggleText = !$scope.toggleText;
-		$scope.sketchpad.editing($scope.toggleDraw);
+	$scope.toggleEditMode = function(mode){
+		if (mode === 'draw') {
+			$scope.toggleDraw = true;
+			$scope.toggleText = true;
+			$scope.sketchpad.editing(true);
+		} else {
+			$scope.toggleDraw = false;
+			$scope.toggleText = false;
+			$scope.sketchpad.editing(false); 
+		}
+	}
+
+	$scope.clearDraw = function(){
+		//todo: fix $apply sync issue
+		$scope.formData.payload.data = '';
+		$scope.sketchpad.clear();
 	}
 }
 
 function LoginCtrl($scope, $resource) {
 	$scope.updateUser = function(){
-		//update user
+		//todo: update user
 		$scope.order();
 	}
 	$scope.order = function(type){
@@ -125,7 +159,7 @@ function LoginCtrl($scope, $resource) {
 
 function GalleryCtrl($scope, $resource) {
 	$scope.currentImage = {};
-	$scope.Gallery = $resource('//gi.mediamagic.co.il/clients/avoda/printingCreator/resources/images', {});
+	$scope.Gallery = $resource($scope.host + '/resources/images', {});
 	$scope.gallery = $scope.Gallery.query(function(r){
 		$scope.gallery = r;
 		$scope.galleryData = {
@@ -164,7 +198,6 @@ function paymentCtrl(){
 function OrderCtrl($scope){
 	$scope.downloadUrl = null;
 	$scope.showSizes = function(){
-
 		if ($scope.formData != undefined && $scope.formData.order.type === 'Shirt') {
 			return false;
 		} else {
@@ -172,26 +205,32 @@ function OrderCtrl($scope){
 		}
 	}
 	$scope.register = function(){
-		if ($scope.development == false) {
+		if ($scope.config.development === false) {
+			$scope.orderForm.$invalid = true;
 			$scope.Rest.save({collection: 'order'}, $scope.formData, function(response){
 				if ($scope.formData.order.type === 'FacebookCover')
 					$scope.downloadUrl = response.downloadUrl;
 				$('#orderDialog').dialog('close');
 				$('#thankyouDialog').dialog('open');
+				$scope.reset();
 			});
 		}
 		else {
-			console.log($scope.formData);
 			$('#orderDialog').dialog('close');
 			$('#thankyouDialog').dialog('open');
+			$scope.reset();
 		}
 	}
 
 	$scope.checkOrderType = function(){
-		if ($scope.formData != undefined && $scope.formData.order.type == 'FacebookCover'){
+		if ($scope.formData != undefined && $scope.formData.order.type === 'FacebookCover') {
 			return true;
 		} else {
 			return false;
 		}
+	}
+	$scope.reset = function(){
+		$scope.validState = $scope.orderForm.$invalid;
+		$scope.$emit('reset');
 	}
 }

@@ -1,3 +1,9 @@
+<script>
+	$('#loginDialog').dialog('destroy');
+	$('#orderDialog').dialog('destroy');
+	$('#thankyouDialog').dialog('destroy');
+</script>
+<link rel="stylesheet" href="css/gallery.css">
 <div id="page_inner">
 	<div
 		id="galleryWrapper">
@@ -26,12 +32,13 @@
 	</div>
 	<a href="#/main">home</a>
 </div>
-<div>
-	<div
-		id="galleryDialog"
-		ui-jq="dialog"
-		ui-options="{title:'please login',autoOpen: false, height: 310, width: 700, modal: true, resizable: false}">
-		<img 
-			ng-src="{{currentImage.imagePath}}" width="650" height="241" />
-	</div>
+<div
+	id="galleryDialog"
+	ui-jq="dialog"
+	ui-options="{title:'please login',autoOpen: false, height: 310, width: 700, modal: true, resizable: false }">
+	<img 
+		ng-src="{{currentImage.imagePath}}" width="650" height="241" />
 </div>
+<script>
+	$('#galleryDialog').on("close", function(event, ui){alert('test')});
+</script>
