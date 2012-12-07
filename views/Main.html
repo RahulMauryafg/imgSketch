@@ -1,24 +1,26 @@
 <script>
 	$('#galleryDialog').dialog('destroy');
-	$('#imageTextInput').die('keyup paste').live('keyup paste', function (e) {
+	$('#imageTextInput').die('keyup paste focus').live('keyup paste focus', function (e) {
         $(this).val($(this).val().replace(/([^ 0-9א-ת!?.,\n\r])/g, "")).trigger('change');
-        // var rows = $(this).val().split('\n');
-        // for(var i=0; i<rows.length;i++){
-        // 	if (rows[i].length > 9){
-        // 		if (rows.length < 3)
-        // 			rows[i] = rows[i].substr(0,9) + '\n';
-        // 		else
-        // 			rows[i] = rows[i].substr(0,9);
-        // 	}
-        // }
-        // var newRows = [];
-        // if (rows[0] != undefined && rows.length > 0)
-        // 	newRows[0] = rows[0];
-        // if (rows[1] != undefined && rows.length > 1)
-        // 	newRows[1] = rows[1];
-        // if (rows[2] != undefined && rows.length > 2)
-        // 	newRows[2] = rows[2];
-        // $(this).val(newRows.join('\n'));
+        var rows = $(this).val().split('\n');
+        for(var i=0; i<rows.length;i++){
+        	if (rows[i].length > 10){
+        		if (rows.length < 2)
+        			rows[i] = rows[i].substr(0,10) + '\n';
+        		else
+        			rows[i] = rows[i].substr(0,10);
+        	}
+        }
+        var newRows = [];
+        if (rows[0] != undefined && rows.length > 0)
+        	newRows[0] = rows[0];
+        if (rows[1] != undefined && rows.length > 1)
+        	newRows[1] = rows[1];
+
+         if (newRows[0].substr(0,5) != 'ביבי ')
+         	newRows[0] = newRows[0].replace(newRows[0].substr(0,4),'ביבי ');
+
+        $(this).val(newRows.join('\n'));
     });
 </script>
 <link rel="stylesheet" href="css/sketch.css">
