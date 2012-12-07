@@ -299,7 +299,7 @@
 				<div>
 					<form name="orderForm"
 						novalidate>
-						<label>המסר שלך יודפס על: חולצה</label>
+						<label>המסר שלך יודפס על: {{formData.order.type|orderType}}</label>
 						<div 
 							ng-hide="showSizes()">
 							<label>בחר מידה: </label>

@@ -1,6 +1,7 @@
 'use strict';
 angular.module('sketchApp', ['ngResource', 'ui']).
-	config(['$routeProvider', '$locationProvider', function($routeProvider, $locationProvider) {
+
+config(['$routeProvider', '$locationProvider', function($routeProvider, $locationProvider) {
 	$routeProvider.
         //when('/home', {templateUrl: 'views/Home.html', controller: HomeCtrl, name:'Main'}).
 		when('/main', {templateUrl: 'views/Main.html', controller: GeneralCtrl, name:'Main'}).
@@ -8,7 +9,8 @@ angular.module('sketchApp', ['ngResource', 'ui']).
 		//when('/gallery', {templateUrl: 'views/Gallery.html', controller: GalleryCtrl, name:'Gallery'}).
 		otherwise({redirectTo: '/main'});
 	//$locationProvider.html5Mode(true);
-}]).directive('openDialog', function(){
+}]).
+directive('openDialog', function(){
     return {
         restrict: 'A',
         link: function(scope, elem, attr, ctrl) {
@@ -18,4 +20,18 @@ angular.module('sketchApp', ['ngResource', 'ui']).
             });
         }
     };
+}).
+filter('orderType', function() {
+    return function(input) {
+        var out = "";
+        if (input === 'Sticker')
+            out = 'סטיקר';
+        if (input === 'Shirt')
+            out = 'חולצה'
+        if (input === 'Sign')
+            out = 'שלת לתליה'
+        if (input === 'Samsonite')
+            out = 'שמשונית'
+        return out;
+    }
 });
