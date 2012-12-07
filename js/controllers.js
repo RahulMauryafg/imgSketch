@@ -15,7 +15,7 @@ function MainCtrl($scope, $route, $routeParams, $location) {
 			dev: '//gi.mediamagic.co.il/clients/avoda/printingCreator',
 			production: '//212.29.200.117'
 		},
-		school: false,
+		school: true,
 		development: false,
 		fb: true,
 		selectType: true,
@@ -231,6 +231,9 @@ function OrderCtrl($scope){
 	}
 	$scope.reset = function(){
 		$scope.validState = $scope.orderForm.$invalid;
+		$scope.step(1);
+		$scope.toggleEditMode('text');
 		$scope.$emit('reset');
+		$scope.orderForm.$setPristine();
 	}
 }

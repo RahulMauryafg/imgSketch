@@ -118,12 +118,35 @@
 .templatePreview .templateTextPreview:hover { border: blue dotted 1px; cursor: move;}
 
 
-#next_step1 {
+.prev_step1 {
+    background: url(../img/button_back_2.png) no-repeat center center;
+    display: block;
+    padding: 0;
+    width: 75px;
+    height: 33px;
+    border: 0;
     position: absolute;
-    left: 0px;
+    left: 194px;
+    top: 84px;
+}
+
+.next_step1 {
+    display: block;
+    background: transparent url(../img/button_next_2.png) no-repeat center center;
+    display: block;
+    padding: 0;
+    width: 75px;
+    height: 33px;
+    border: 0;
+    position: absolute;
+    left: 194px;
+    top: 50px;
 }
 
 .button_next {
+    position: absolute;
+    top: 0;
+    left: 0;
     display: block;
     background: transparent url(../img/button_form_next.png) no-repeat center center;
     width: 68px;
@@ -166,6 +189,27 @@
     padding: 1px 8px 10px 1px;
     cursor: pointer;
     background: transparent url(../img/button_edit_draw.png) no-repeat center center;
+}
+
+.orderCover {
+    position: absolute;
+    top: -320px;
+    font-size: 25px;
+    right: 0px;
+}
+.orderCover input[type=radio]{
+    display: none;
+}
+
+.orderPrint {
+    position: absolute;
+    top: 10px;
+}
+
+.orderPrint .orderPrintOption {
+    display: inline-block;
+    margin: 0 0 0 30px;
+    font-size: 24px;
 }
 
 #editTools *{
