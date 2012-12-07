@@ -15,10 +15,10 @@ function MainCtrl($scope, $route, $routeParams, $location) {
 			dev: '//gi.mediamagic.co.il/clients/avoda/printingCreator',
 			production: '//212.29.200.117'
 		},
-		school: true,
+		school: false,
 		development: false,
-		fb: false,
-		selectType: false,
+		fb: true,
+		selectType: true,
 		defaultType: 'Shirt',
 		defaultSize: 'M',
 		gallery: {
