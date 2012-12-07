@@ -278,8 +278,23 @@
     display: none;
 }
 
-#orderWrapper {
+#orderWrapper, #loginWrapper {
     width: 415px;
+    margin: 0 auto;
+}
+
+#loginWrapper .loginTitle {
+    text-align: center;
+    font-size: 28px;
+    margin: 50px 0 0 0;
+}
+
+#loginWrapper .loginFacebook {
+    display: block;
+    width: 191px;
+    height: 23px;
+    border: none;
+    background: transparent url(../img/button_fb_connect.png) no-repeat center center;
     margin: 0 auto;
 }
 

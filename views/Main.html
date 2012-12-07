@@ -277,10 +277,10 @@
 		ng-controller="LoginCtrl" 
 		ui-jq="dialog" 
 		ui-options="{title:'',autoOpen: false, height: 271, width: 532, modal: true, resizable: false, draggable: false, position: ['center', 110]}">
-		<div style="width:174px; margin: 62px auto 0 auto;">
-			<span>login with facebook</span>
-			<button>facebook connect</button>
-			<a ng-click="order()">skip</a>
+		<div id="loginWrapper">
+			<div class="loginTitle">התחברו להורדת תמונת COVER</div>
+			<button class="loginFacebook">&nbsp;</button>
+			<a ng-click="order()" ng-show="true" class="loginSkip">skip</a>
 		</div>
 	</div>
 </div>
