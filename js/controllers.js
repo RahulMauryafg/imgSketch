@@ -35,6 +35,7 @@ function MainCtrl($scope, $route, $routeParams, $location) {
 
 function GeneralCtrl($scope,$resource){
 	//Constructor
+	//TODO: init formdata object prior to settings load, update imageTemplate property after settings init
 	$scope.Settings = $resource($scope.host + '/resources/settings', {});
 	$scope.settings = $scope.Settings.get(function(r){ 
 		$scope.settings = r;
@@ -65,16 +66,18 @@ function GeneralCtrl($scope,$resource){
 		$scope.master = angular.copy($scope.formData);
 	});
 
+	$scope.imageData = {};
+	$scope.currentStep = 1;
+	$scope.toggleDraw = false;
+	$scope.toggleText = false;
+
+	//EVENTS
 	$scope.$on('reset', function(){
 		$scope.formData = angular.copy($scope.master);
 		$scope.sketchpad.clear();
 	});
 
-	$scope.sketchpad = Raphael.sketchpad("editor", {
-		width: 330,
-		height: 220,
-		editing: true
-	});
+	$scope.sketchpad = Raphael.sketchpad("editor", {width: 330, height: 220, editing: true});
 
 	$scope.sketchpad.change(function() {
 		var json = $scope.sketchpad.json();
@@ -82,11 +85,6 @@ function GeneralCtrl($scope,$resource){
 			$("#sketchData").val(escape($('#editor').html())).trigger('input').trigger('change') :
 			$("#sketchData").val('').trigger('input').trigger('change');
 	});
-
-	$scope.imageData = {};
-	$scope.currentStep = 1;
-	$scope.toggleDraw = false;
-	$scope.toggleText = false;
 	
 	//Form flow controls
 	$scope.selectTemplate = function (index) {
@@ -128,12 +126,10 @@ function GeneralCtrl($scope,$resource){
 
 	$scope.toggleEditMode = function(mode){
 		if (mode === 'draw') {
-			$scope.toggleDraw = true;
-			$scope.toggleText = true;
+			$scope.toggleDraw = $scope.toggleText = true;
 			$scope.sketchpad.editing(true);
-		} else {
-			$scope.toggleDraw = false;
-			$scope.toggleText = false;
+		} else if (mode === 'text') {
+			$scope.toggleDraw = $scope.toggleText = false;
 			$scope.sketchpad.editing(false); 
 		}
 	}
@@ -146,6 +142,38 @@ function GeneralCtrl($scope,$resource){
 }
 
 function LoginCtrl($scope, $resource) {
+
+	$scope.fbMode = function(){
+		var mode = ($scope.formData != undefined && $scope.formData.order.type === 'FacebookCover') ? false : true;
+		return mode;
+	}
+
+	$scope.fbLogin = function(){
+		var fbState = null;
+		FB.getLoginStatus(function(response){
+			if (response.status === 'connected'){
+				console.log('logged in and authorized')
+				fbState = 2;
+			} else if (response.status === 'not_authorized') {
+				console.log('logged in not authorized')
+				fbState = 1;
+			} else {
+				console.log('not logged in to facebook');
+				fbState = 0;
+			}
+		});
+
+		if (fbState === 2 && $scope.fbMode() === true) {
+			//print flow
+			//update user
+			//open order form
+		} else if (fbState === 2 && $scope.fbMode() === false){
+			//cover flow
+			//update user
+			//send data
+		}
+	}
+
 	$scope.updateUser = function(){
 		//todo: update user
 		$scope.order();
@@ -190,10 +218,6 @@ function GalleryCtrl($scope, $resource) {
 		$scope.currentSet = $scope.gallery.slice(newStartindex,newStartindex + $scope.settings.gallery.perPage);
 	}
 }
-
-function paymentCtrl(){
-}
-
 
 function OrderCtrl($scope){
 	$scope.downloadUrl = null;

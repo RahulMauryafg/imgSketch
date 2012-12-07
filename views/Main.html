@@ -278,9 +278,10 @@
 		ui-jq="dialog" 
 		ui-options="{title:'',autoOpen: false, height: 271, width: 532, modal: true, resizable: false, draggable: false, position: ['center', 110]}">
 		<div id="loginWrapper">
-			<div class="loginTitle">התחברו להורדת תמונת COVER</div>
-			<button class="loginFacebook">&nbsp;</button>
-			<a ng-click="order()" ng-show="true" class="loginSkip">skip</a>
+			<div class="loginTitle" ng-show="!fbMode()">התחברו להורדת תמונת COVER</div>
+			<div class="loginTitle" ng-show="fbMode()">על מנת להזמין את השלת שבחרתם עליכם למלא פרטים איך תרצו להמשיך?</div>
+			<button class="loginFacebook" ng-click="fbLogin()">&nbsp;</button>
+			<a ng-click="order()" ng-show="fbMode()" class="loginSkip">להמשיך מבלי להתחבר לפייסבוק</a>
 		</div>
 	</div>
 </div>
