@@ -57,9 +57,10 @@
     z-index: 4;
     background: transparent;
     color: black;
-    text-align: center;
-    line-height: 58px;
-    font-size: 42px;
+    text-align: right;
+    letter-spacing: -1px;
+    line-height: 55px;
+    font-size: 56px;
     overflow: hidden;
 }
 .templatePreview #imageTextInput.true {
@@ -71,15 +72,15 @@
 }
 .templatePreview #imageTextInput.true.tpl1, 
 .templatePreview #imageTextInput.tpl1{
-    font-family: 'ghaim';
+    font-family: 'sixseven_old';
 }
 .templatePreview #imageTextInput.true.tpl2, 
 .templatePreview #imageTextInput.tpl2{
-    font-family: 'ghaim';
+    font-family: 'sixseven_old';
 }
 .templatePreview #imageTextInput.true.tpl3, 
 .templatePreview #imageTextInput.tpl3{
-    font-family: 'ghaim';
+    font-family: 'sixseven_old';
 }
 .templatePreview #imageTextInput.tpl1::-webkit-input-placeholder,
 .templatePreview #imageTextInput.tpl2::-webkit-input-placeholder, 

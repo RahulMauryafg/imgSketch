@@ -2,23 +2,23 @@
 	$('#galleryDialog').dialog('destroy');
 	$('#imageTextInput').die('keyup paste').live('keyup paste', function (e) {
         $(this).val($(this).val().replace(/([^ 0-9א-ת!?.,\n\r])/g, "")).trigger('change');
-        var rows = $(this).val().split('\n');
-        for(var i=0; i<rows.length;i++){
-        	if (rows[i].length > 9){
-        		if (rows.length < 3)
-        			rows[i] = rows[i].substr(0,9) + '\n';
-        		else
-        			rows[i] = rows[i].substr(0,9);
-        	}
-        }
-        var newRows = [];
-        if (rows[0] != undefined && rows.length > 0)
-        	newRows[0] = rows[0];
-        if (rows[1] != undefined && rows.length > 1)
-        	newRows[1] = rows[1];
-        if (rows[2] != undefined && rows.length > 2)
-        	newRows[2] = rows[2];
-        $(this).val(newRows.join('\n'));
+        // var rows = $(this).val().split('\n');
+        // for(var i=0; i<rows.length;i++){
+        // 	if (rows[i].length > 9){
+        // 		if (rows.length < 3)
+        // 			rows[i] = rows[i].substr(0,9) + '\n';
+        // 		else
+        // 			rows[i] = rows[i].substr(0,9);
+        // 	}
+        // }
+        // var newRows = [];
+        // if (rows[0] != undefined && rows.length > 0)
+        // 	newRows[0] = rows[0];
+        // if (rows[1] != undefined && rows.length > 1)
+        // 	newRows[1] = rows[1];
+        // if (rows[2] != undefined && rows.length > 2)
+        // 	newRows[2] = rows[2];
+        // $(this).val(newRows.join('\n'));
     });
 </script>
 <link rel="stylesheet" href="css/sketch.css">
@@ -39,6 +39,26 @@
 			@font-face {
 				font-family: ghaim;
 				src: url("fonts/GHAIM.ttf");
+			}
+			@font-face {
+				font-family: 'sixseven_old';
+				src: url('fonts/sixtysevenfot-bold-webfont.eot');
+				src: url('fonts/sixtysevenfot-bold-webfont.eot?#iefix') format('embedded-opentype'),
+				url('fonts/sixtysevenfot-bold-webfont.woff') format('woff'),
+				url('fonts/sixtysevenfot-bold-webfont.ttf') format('truetype'),
+				url('fonts/sixtysevenfot-bold-webfont.svg#sixtysevenfot_oldregular') format('svg');
+				font-weight: normal;
+				font-style: normal;
+			}
+			@font-face {
+				font-family: 'sixseven_regular';
+				src: url('fonts/sixtysevenfot-regular-webfont.eot');
+				src: url('fonts/sixtysevenfot-regular-webfont.eot?#iefix') format('embedded-opentype'),
+				url('fonts/sixtysevenfot-regular-webfont.woff') format('woff'),
+				url('fonts/sixtysevenfot-regular-webfont.ttf') format('truetype'),
+				url('fonts/sixtysevenfot-regular-webfont.svg#sixtysevenfot_regularregular') format('svg');
+				font-weight: normal;
+				font-style: normal;
 			}
 			@font-face {
 			    font-family: 'aduma';
