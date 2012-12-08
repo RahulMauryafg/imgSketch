@@ -141,6 +141,39 @@ html, body {
     background: url(../img/inner_bg.jpg) no-repeat center center;
 }
 
+#footer {
+    right: 35px;
+    width: 719px;
+    bottom: 40px;
+    position: absolute;
+}
+
+#footer div {
+    display: inline-block;
+    height: 32px;
+}
+
+#footer #share {
+    position: absolute;
+    top: 8px;
+    right: 10px;
+    line-height: 32px;
+    width: 70px;
+    height: 32px;
+    background: url(../img/button_share.png) no-repeat center center;
+    display: inline-block;
+}
+
+#footer #logout {
+    position: absolute;
+    top: 8px;
+    right: 190px;
+    display: inline-block;
+    color: white;
+    height: 32px;
+    line-height: 32px;
+}
+
 
    /* ==========================================================================
    Jquery UI RTL Fix

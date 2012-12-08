@@ -4,7 +4,7 @@
  * Main Controller
  * create a global scope with routing information
 **/
-function MainCtrl($scope, $route, $routeParams, $location) {
+function MainCtrl($scope, $route, $routeParams, $location, $window) {
 	$scope.$route = $route;
 	$scope.$location = $location;
 	$scope.$routeParams = $routeParams;
@@ -29,7 +29,17 @@ function MainCtrl($scope, $route, $routeParams, $location) {
 			perPage: 4
 		}
 	}
-	$scope.host = ($scope.config.production) ? $scope.config.hosts.production : $scope.config.hosts.dev;
+	$scope.host = ($scope.config.production) ? 
+		$scope.config.hosts.production : 
+		$scope.config.hosts.dev;
+	$scope.shareFB = function(){
+		$window.open('http://www.facebook.com/sharer.php?u=' 
+						+ encodeURIComponent($scope.host 
+						+ '?' 
+						+ $.param({ random: Math.floor((Math.random()*100000000)+1)})),
+					'sharer', 
+					'toolbar=0,status=0,width=656,height=436');
+	}
 }
 
 /*
@@ -39,18 +49,32 @@ function MainCtrl($scope, $route, $routeParams, $location) {
 
 function GeneralCtrl($scope,$resource){
 	//Constructor
-	//TODO: init formdata object prior to settings load, update imageTemplate property after settings init
+	//TODO: init formdata object prior to settings load,
+	//update imageTemplate property after settings init
 	$scope.Settings = $resource($scope.host + '/resources/settings', {});
 	$scope.settings = $scope.Settings.get(function(r){ 
 		$scope.settings = r;
 		$scope.currentTemplate = $scope.settings.templates[0];
-		$scope.Api = $resource($scope.settings.host + 'api/:action', {});
-		$scope.Rest = $resource($scope.settings.host + 'resources/:collection/:id', {});
+		$scope.Api = $resource($scope.settings.host 
+			+ 'api/:action', {});
+		$scope.Rest = $resource($scope.settings.host 
+			+ 'resources/:collection/:id', {});
 		$scope.formData = {
 			payload: {
-				imageText: {posX: 320, posY: 28, width:"290", height:"190" },
+				imageText: {
+					posX: 320,
+					posY: 28,
+					width:"290",
+					height:"190" 
+				},
 				imageTemplate: $scope.currentTemplate.id,
-				imageData: {posX: 283, posY: 10, width: "330", height: "220", data: ''}
+				imageData: {
+					posX: 283,
+					posY: 10,
+					width: "330",
+					height: "220",
+					data: ''
+				}
 			},
 			user: {
 				fbUid: 0,
@@ -73,6 +97,10 @@ function GeneralCtrl($scope,$resource){
 			}
 		};
 		$scope.master = angular.copy($scope.formData);
+		if ($scope.$routeParams.thankyou != undefined 
+				&& $scope.$routeParams.thankyou === "true"){
+			$('#thankyouDialog').dialog('open');
+		}
 	});
 
 	$scope.imageData = {};
@@ -82,12 +110,23 @@ function GeneralCtrl($scope,$resource){
 	$scope.photoId = 0;
 
 	$scope.updateUserFromFB = function(cb){
-		FB.api('/me', function(response) {
-			$scope.formData.user.fbUid = response.id;
-			$scope.formData.user.email = response.email;
-			$scope.formData.user.name = response.name;
-			cb();
-		});
+		if (cb ==='logout'){
+			console.log('logging out user');
+			FB.logout(function(resp){
+				console.log(resp);
+				$scope.formData.user.fbUid = 0;
+				$scope.formData.user.email = '';
+				$scope.formData.user.name = '';
+			});
+		} else {
+			FB.api('/me', function(response) {
+				$scope.formData.user.fbUid = response.id;
+				$scope.formData.user.email = response.email;
+				$scope.formData.user.name = response.name;
+				cb();
+			});
+			console.log('update user -> cb');
+		}
 	}
 
 	$scope.$on('photofinish', function(e, obj){
@@ -101,10 +140,12 @@ function GeneralCtrl($scope,$resource){
 		$scope.sketchpad.clear();
 	});
 
-	$scope.sketchpad = Raphael.sketchpad("editor", {width: 330, height: 220, editing: true});
+	$scope.sketchpad = Raphael.sketchpad("editor", 
+		{width: 330, height: 220, editing: true});
 
 	$scope.sketchpad.change(function() {
 		var json = $scope.sketchpad.json();
+		//TODO: check if $apply will fix the need for triggers
 		(json.length > 2) ?
 			$("#sketchData").val(escape($('#editor').html())).trigger('input').trigger('change') :
 			$("#sketchData").val('').trigger('input').trigger('change');
@@ -167,15 +208,9 @@ function GeneralCtrl($scope,$resource){
 }
 
 function LoginCtrl($scope, $resource) {
-
-	$scope.fbMode = function(){
-		var mode = ($scope.formData != undefined && $scope.formData.order.type === 'FacebookCover') ? false : true;
-		return mode;
-	}
-
-
 	$scope.uploading = false;
 	$scope.fbState = 0;
+
 	$scope.$on('fbLogin', function(){
 		FB.getLoginStatus(function(response){
 			if (response.status === 'connected'){
@@ -189,49 +224,104 @@ function LoginCtrl($scope, $resource) {
 				console.log('not logged in to facebook');
 				$scope.fbState = 0;
 			}
+			console.log('fblogin state = ' + $scope.fbState);
 		});
 	});
 
+	$scope.$on('fbLogout', function(){
+		$scope.updateUserFromFB('logout');
+	});
+
+	$scope.fbMode = function(){
+		var mode = ($scope.formData != undefined 
+			&& $scope.formData.order.type === 'FacebookCover') ? 
+				false : 
+				true;
+		return mode;
+	}
+
 	$scope.fbProcess = function(){
+		$scope.uploading = false;
 		if ($scope.fbState === 2) {
+			console.log('authorized, processing fb data');
 			$scope.updateUserFromFB(function(){
+				console.log('cb: finished updating user');
 				if ($scope.fbMode() === true) {
+					console.log('order type: PRINT -> continue to form');
 					$scope.order();
 				} else if ($scope.fbMode() === false){
-					$scope.Rest.save({collection: 'order'}, $scope.formData, function(response){
-						$scope.uploading = true;
-						FB.api('/me/photos', 'post', { message: 'test', url: 'http:' + $scope.host + '/Resources/Printings/' + response.downloadUrl.split('=')[1]}, function(resp){
-							if(resp.id != undefined){
-								//FB.api('/'+ resp.id +'/tags','post', {to: $scope.formData.user.fbUid }, function(){
-									$scope.uploading = false;
-									$scope.$emit('photofinish', {id: resp.id, downloadUrl: response.downloadUrl});
-									$scope.$apply(function(){
-										$('#loginDialog').dialog('close');
-										$('#thankyouDialog').dialog('open');
-									});
-								//});
-							}
+					console.log('order type: COVER -> upload image -> cb');
+
+					var userObj = {
+						user: {
+							fbUid: $scope.formData.user.fbUid,
+							name: $scope.formData.user.name,
+							email: $scope.formData.user.email
+						},
+						payload: $scope.formData.payload,
+						order: $scope.formData.order
+					}
+					$scope.Rest.save({collection: 'order'}, userObj, 
+						function(response){
+							$scope.uploading = true;
+							$scope.attempts = 1;
+							$scope.uploadToFB(response);
 						});
-					});
 				}
 			});
-		} else if ($scope.fbState === 1) {
+		} else {
 			FB.login(function(response) {
+				console.log(response);
 				if (response.authResponse) {
+					console.log('fb authorized -> triggering fbLogin process');
 					$scope.$emit('fbLogin');
 				}
 			}, {scope:'email,publish_stream,user_photos'});
 		}
 	}
 
-	$scope.order = function(type){
-		$scope.$apply(function(){
-			$('#loginDialog').dialog('close');
-			$('#orderDialog').dialog('open');
+	$scope.uploadToFB = function(response){
+		console.log('attempt #' + $scope.attempts);
+		FB.api('/me/photos', 'post', { 
+			message: 'test', 
+			url: 'http:' + $scope.host + '/Resources/Printings/' 
+				+ response.downloadUrl.split('=')[1]
+		}, function(resp){
+			$scope.uploading = false;
+			if(resp.id != undefined){
+				console.log('cb: photo added to facebook');
+				$scope.$emit('photofinish', {
+					id: resp.id, 
+					downloadUrl: response.downloadUrl
+				});
+				$scope.$apply(function(){
+					$('#loginDialog').dialog('close');
+					$('#thankyouDialog').dialog('open');
+				});
+			} else {
+				console.log('error: ' + resp.error.message);
+				if ($scope.attempts < 3) {
+					$scope.attempts++;
+					$scope.uploadToFB(response);
+				} else {
+					$scope.uploading = false;
+				}
+			}
 		});
 	}
-}
 
+	$scope.order = function(skip){
+		if (skip === true) {
+			$('#loginDialog').dialog('close');
+			$('#orderDialog').dialog('open');	
+		} else {
+			$scope.$apply(function(){
+				$('#loginDialog').dialog('close');
+				$('#orderDialog').dialog('open');
+			});
+		}
+	}
+}
 
 function GalleryCtrl($scope, $resource) {
 	$scope.currentImage = {};
@@ -254,22 +344,26 @@ function GalleryCtrl($scope, $resource) {
 	}
 
 	$scope.page = function(action){
-		if (action === 'next' && $scope.galleryData.currentPage < $scope.galleryData.pages)
+		if (action === 'next' 
+				&& $scope.galleryData.currentPage < $scope.galleryData.pages)
 			$scope.galleryData.currentPage++;
-		if (action === 'prev' && $scope.galleryData.currentPage > 1)
+		if (action === 'prev' 
+				&& $scope.galleryData.currentPage > 1)
 			$scope.galleryData.currentPage--;
 		$scope.getCurrentSet($scope.galleryData.currentPage);
 	}
 
 	$scope.getCurrentSet = function(page){
 		var newStartindex = (page-1)*$scope.settings.gallery.perPage;
-		$scope.currentSet = $scope.gallery.slice(newStartindex,newStartindex + $scope.settings.gallery.perPage);
+		$scope.currentSet = $scope.gallery.slice(newStartindex,newStartindex 
+			+ $scope.settings.gallery.perPage);
 	}
 }
 
 function OrderCtrl($scope, $location, $window){
 	$scope.showSizes = function(){
-		if ($scope.formData != undefined && $scope.formData.order.type === 'Shirt') {
+		if ($scope.formData != undefined 
+				&& $scope.formData.order.type === 'Shirt') {
 			return false;
 		} else {
 			return true;
@@ -286,25 +380,31 @@ function OrderCtrl($scope, $location, $window){
 	$scope.register = function(){
 		if ($scope.config.development === false) {
 			$scope.orderForm.$invalid = true;
-			$scope.Rest.save({collection: 'order'}, $scope.formData, function(response){
-				$('#orderDialog').dialog('close');
-				var sendObj = {
-					p_IDNumber: $scope.formData.user.personId,
-					p_amount_agorot: $scope.formData.user.amount * 100,
-					p_payment_purpose: 'donate_campaign',
-					p_redirect: $location.$$absUrl,
-					p_title: 'תרומה למפלגת העבודה',
-					p_payments_enabled: 1,
-					p_payments_number:  $scope.formData.user.payments,
-					p_OrderID: response.orderId
-				}
-				var urlParams = $scope.encQuery(sendObj);
-				var payHost  = ($scope.config.production) ? $scope.config.payHost.production : $scope.config.payHost.dev;
-				var redirectUrl = payHost + urlParams;
-				$window.location = redirectUrl;
-				$scope.reset();
-
-			});
+			$scope.Rest.save({collection: 'order'}, $scope.formData, 
+				function(response){
+					$('#orderDialog').dialog('close');
+					var sendObj = {
+						p_IDNumber: $scope.formData.user.personId,
+						p_amount_agorot: $scope.formData.user.amount * 100,
+						p_payment_purpose: 'donate_campaign',
+						p_redirect: $location.$$protocol + '://' 
+							+ $location.$$host 
+							+ '/#' 
+							+ $location.$$path 
+							+ '?thankyou=true',
+						p_title: 'תרומה למפלגת העבודה',
+						p_payments_enabled: 1,
+						p_payments_number:  $scope.formData.user.payments,
+						p_OrderID: response.orderId
+					}
+					var urlParams = $scope.encQuery(sendObj);
+					var payHost  = ($scope.config.production) ? 
+						$scope.config.payHost.production : 
+						$scope.config.payHost.dev;
+					var redirectUrl = payHost + urlParams;
+					$window.location = redirectUrl;
+					$scope.reset();
+				});
 		}
 		else {
 			$scope.$apply(function(){
@@ -316,7 +416,8 @@ function OrderCtrl($scope, $location, $window){
 	}
 
 	$scope.checkOrderType = function(){
-		if ($scope.formData != undefined && $scope.formData.order.type === 'FacebookCover') {
+		if ($scope.formData != undefined 
+			&& $scope.formData.order.type === 'FacebookCover') {
 			return true;
 		} else {
 			return false;

@@ -302,6 +302,13 @@
     margin: 0 auto;
 }
 
+#loginWrapper .loginLoader {
+    width: 415px;
+    text-align: center;
+    position: absolute;
+    bottom: 38px;
+}
+
 #loginWrapper .loginSkip {
     position: absolute;
     bottom: 15px;
