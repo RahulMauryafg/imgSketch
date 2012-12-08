@@ -248,7 +248,7 @@ function LoginCtrl($scope, $resource) {
 				console.log('cb: finished updating user');
 				if ($scope.fbMode() === true) {
 					console.log('order type: PRINT -> continue to form');
-					$scope.order();
+					$scope.order(false);
 				} else if ($scope.fbMode() === false){
 					console.log('order type: COVER -> upload image -> cb');
 
@@ -366,6 +366,7 @@ function GalleryCtrl($scope, $resource) {
 }
 
 function OrderCtrl($scope, $location, $window){
+	$scope.uploading = false;
 	$scope.showSizes = function(){
 		if ($scope.formData != undefined 
 				&& $scope.formData.order.type === 'Shirt') {
@@ -383,6 +384,7 @@ function OrderCtrl($scope, $location, $window){
 	}
 
 	$scope.register = function(){
+		$scope.uploading = true;
 		if ($scope.config.development === false) {
 			$scope.orderForm.$invalid = true;
 			$scope.Rest.save({collection: 'order'}, $scope.formData, 

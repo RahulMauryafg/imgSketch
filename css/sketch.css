@@ -381,8 +381,6 @@
     text-align: center;
 }
 
-
-
 #orderWrapper .order_inputs input[type=text].ng-invalid.ng-dirty, 
 #orderWrapper .order_inputs input[type=email].ng-invalid.ng-dirty,
 #orderWrapper .order_inputs input[type=number].ng-invalid.ng-dirty,
