@@ -365,7 +365,7 @@
 #orderWrapper .order_inputs  input[type=text].ng-valid.ng-dirty,
 #orderWrapper .order_inputs  input[type=email].ng-valid.ng-dirty,
 #orderWrapper .order_inputs  input[type=number].ng-valid.ng-dirty,
-{
+#orderWrapper .order_inputs input[type=tel].ng-valid.ng-dirty{
     outline: none;
     background: #ccffcc;
 }

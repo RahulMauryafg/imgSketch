@@ -280,7 +280,7 @@
 		<div id="loginWrapper">
 			<div class="loginTitle" ng-show="!fbMode()">התחברו להורדת תמונת COVER</div>
 			<div class="loginTitle" ng-show="fbMode()">על מנת להזמין את השלט שבחרתם עליכם למלא פרטים, איך תרצו להמשיך?</div>
-			<button class="loginFacebook" ng-click="fbLogin()">&nbsp;</button>
+			<button class="loginFacebook" ng-click="fbProcess()">&nbsp;</button>
 			<a ng-click="order()" ng-show="fbMode()" class="loginSkip">להמשיך מבלי להתחבר לפייסבוק</a>
 		</div>
 	</div>
@@ -457,8 +457,12 @@
 				<div class="thankyouTitle">
 					תודה בקשתכם התקבלה.
 				</div>
-				<div ng-show="checkOrderType()">
+			</div>
+			<div ng-show="checkOrderType()">
+				<div class="thankyouTitle">
 					Thank you + download <a href="{{downloadUrl}}">link</a>
+					or
+					Set image as facebook cover <a href="//www.facebook.com/djabor?preview_cover={{photoId}}">link</a>
 				</div>
 			</div>
 		</div>

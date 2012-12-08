@@ -79,6 +79,21 @@ function GeneralCtrl($scope,$resource){
 	$scope.currentStep = 1;
 	$scope.toggleDraw = false;
 	$scope.toggleText = false;
+	$scope.photoId = 0;
+
+	$scope.updateUserFromFB = function(cb){
+		FB.api('/me', function(response) {
+			$scope.formData.user.fbUid = response.id;
+			$scope.formData.user.email = response.email;
+			$scope.formData.user.name = response.name;
+			cb();
+		});
+	}
+
+	$scope.$on('photofinish', function(e, obj){
+		$scope.photoId = obj.id;
+		$scope.downloadUrl = obj.downloadUrl;
+	});
 
 	//EVENTS
 	$scope.$on('reset', function(){
@@ -127,7 +142,8 @@ function GeneralCtrl($scope,$resource){
 			$scope.formData.order.type = 'FacebookCover';
 		}
 		if ($scope.config.fb) {
-			$('#loginDialog').dialog('open');	
+			$('#loginDialog').dialog('open');
+			$scope.$broadcast('fbLogin');
 		} else {
 			$('#orderDialog').dialog('open');
 		}
@@ -157,39 +173,62 @@ function LoginCtrl($scope, $resource) {
 		return mode;
 	}
 
-	$scope.fbLogin = function(){
-		var fbState = null;
+
+	$scope.uploading = false;
+	$scope.fbState = 0;
+	$scope.$on('fbLogin', function(){
 		FB.getLoginStatus(function(response){
 			if (response.status === 'connected'){
 				console.log('logged in and authorized')
-				fbState = 2;
+				$scope.fbState = 2;
+				$scope.fbProcess();
 			} else if (response.status === 'not_authorized') {
 				console.log('logged in not authorized')
-				fbState = 1;
+				$scope.fbState = 1;
 			} else {
 				console.log('not logged in to facebook');
-				fbState = 0;
+				$scope.fbState = 0;
 			}
 		});
+	});
 
-		if (fbState === 2 && $scope.fbMode() === true) {
-			//print flow
-			//update user
-			//open order form
-		} else if (fbState === 2 && $scope.fbMode() === false){
-			//cover flow
-			//update user
-			//send data
+	$scope.fbProcess = function(){
+		if ($scope.fbState === 2) {
+			$scope.updateUserFromFB(function(){
+				if ($scope.fbMode() === true) {
+					$scope.order();
+				} else if ($scope.fbMode() === false){
+					$scope.Rest.save({collection: 'order'}, $scope.formData, function(response){
+						$scope.uploading = true;
+						FB.api('/me/photos', 'post', { message: 'test', url: 'http:' + $scope.host + '/Resources/Printings/' + response.downloadUrl.split('=')[1]}, function(resp){
+							if(resp.id != undefined){
+								//FB.api('/'+ resp.id +'/tags','post', {to: $scope.formData.user.fbUid }, function(){
+									$scope.uploading = false;
+									$scope.$emit('photofinish', {id: resp.id, downloadUrl: response.downloadUrl});
+									$scope.$apply(function(){
+										$('#loginDialog').dialog('close');
+										$('#thankyouDialog').dialog('open');
+									});
+								//});
+							}
+						});
+					});
+				}
+			});
+		} else if ($scope.fbState === 1) {
+			FB.login(function(response) {
+				if (response.authResponse) {
+					$scope.$emit('fbLogin');
+				}
+			}, {scope:'email,publish_stream,user_photos'});
 		}
 	}
 
-	$scope.updateUser = function(){
-		//todo: update user
-		$scope.order();
-	}
 	$scope.order = function(type){
-		$('#loginDialog').dialog('close');
-		$('#orderDialog').dialog('open');
+		$scope.$apply(function(){
+			$('#loginDialog').dialog('close');
+			$('#orderDialog').dialog('open');
+		});
 	}
 }
 
@@ -229,7 +268,6 @@ function GalleryCtrl($scope, $resource) {
 }
 
 function OrderCtrl($scope, $location, $window){
-	$scope.downloadUrl = null;
 	$scope.showSizes = function(){
 		if ($scope.formData != undefined && $scope.formData.order.type === 'Shirt') {
 			return false;
@@ -249,10 +287,7 @@ function OrderCtrl($scope, $location, $window){
 		if ($scope.config.development === false) {
 			$scope.orderForm.$invalid = true;
 			$scope.Rest.save({collection: 'order'}, $scope.formData, function(response){
-				if ($scope.formData.order.type === 'FacebookCover')
-					$scope.downloadUrl = response.downloadUrl;
 				$('#orderDialog').dialog('close');
-				//$('#thankyouDialog').dialog('open');
 				var sendObj = {
 					p_IDNumber: $scope.formData.user.personId,
 					p_amount_agorot: $scope.formData.user.amount * 100,
@@ -263,19 +298,19 @@ function OrderCtrl($scope, $location, $window){
 					p_payments_number:  $scope.formData.user.payments,
 					p_OrderID: response.orderId
 				}
-				console.log(sendObj);
 				var urlParams = $scope.encQuery(sendObj);
 				var payHost  = ($scope.config.production) ? $scope.config.payHost.production : $scope.config.payHost.dev;
 				var redirectUrl = payHost + urlParams;
-				console.log(redirectUrl);
 				$window.location = redirectUrl;
 				$scope.reset();
 
 			});
 		}
 		else {
-			$('#orderDialog').dialog('close');
-			$('#thankyouDialog').dialog('open');
+			$scope.$apply(function(){
+				$('#orderDialog').dialog('close');
+				$('#thankyouDialog').dialog('open');
+			});
 			$scope.reset();
 		}
 	}
