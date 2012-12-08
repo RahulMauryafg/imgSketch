@@ -468,16 +468,18 @@
 			id="thankyouDialog"
 			ui-jq="dialog"
 			ui-options="{title:'',autoOpen: false, height: 271, width: 532, modal: true, resizable: false, draggable: false, position: ['center', 110]}">
-			<div ng-hide="checkOrderType()" id="thankyouWrapper">
-				<div class="thankyouTitle">
-					תודה בקשתכם התקבלה.
+			<div  id="thankyouWrapper">
+				<div ng-hide="checkOrderType()" class="thankyouTitle">
+						תודה בקשתכם התקבלה.
 				</div>
-			</div>
-			<div ng-show="checkOrderType()">
-				<div class="thankyouTitle">
-					Thank you + download <a href="{{downloadUrl}}">link</a>
-					or
-					Set image as facebook cover <a href="//www.facebook.com/djabor?preview_cover={{photoId}}">link</a>
+				<div ng-show="checkOrderType()">
+					<div class="thankyouTitle download">
+						תודה בקשתכם התקבלה.
+						<a id="coverLink" href="//www.facebook.com/djabor?preview_cover={{photoId}}">&nbsp;</a>
+					</div>
+					<div id="downloadLink">
+						או לחצו <a href="{{downloadUrl}}">כאן</a> להורדת התמונה למחשב
+					</div>
 				</div>
 			</div>
 		</div>

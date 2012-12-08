@@ -362,6 +362,27 @@
     font-size: 28px;
 }
 
+#thankyouWrapper .thankyouTitle.download {
+    top: 34px;
+}
+
+#thankyouWrapper .thankyouTitle #coverLink {
+    display: inline-block;
+    width: 291px;
+    height: 53px;
+    background: transparent url(../img/button_fb_cover.png) no-repeat center center;
+    text-decoration: none;
+}
+
+#thankyouWrapper #downloadLink {
+    position: absolute;
+    top: 140px;
+    width: 415px;
+    text-align: center;
+}
+
+
+
 #orderWrapper .order_inputs input[type=text].ng-invalid.ng-dirty, 
 #orderWrapper .order_inputs input[type=email].ng-invalid.ng-dirty,
 #orderWrapper .order_inputs input[type=number].ng-invalid.ng-dirty,
