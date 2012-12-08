@@ -302,7 +302,7 @@
     margin: 0 auto;
 }
 
-#loginWrapper .loginLoader {
+#loginWrapper .loginLoader, #loginWrapper .errorMSG{
     width: 415px;
     text-align: center;
     position: absolute;

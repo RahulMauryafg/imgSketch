@@ -281,9 +281,10 @@ function LoginCtrl($scope, $resource) {
 	}
 
 	$scope.uploadToFB = function(response){
-		console.log('attempt #' + $scope.attempts);
+		$scope.downloadUrl = null;
+		$scope.uploadError = false;
 		FB.api('/me/photos', 'post', { 
-			message: 'test', 
+			message: 'test',
 			url: 'http:' + $scope.host + '/Resources/Printings/' 
 				+ response.downloadUrl.split('=')[1]
 		}, function(resp){
@@ -304,7 +305,11 @@ function LoginCtrl($scope, $resource) {
 					$scope.attempts++;
 					$scope.uploadToFB(response);
 				} else {
-					$scope.uploading = false;
+					$scope.$apply(function(){
+						$scope.uploading = false;
+						$scope.uploadError = true;
+						$scope.downloadUrl = response.downloadUrl;
+					});
 				}
 			}
 		});

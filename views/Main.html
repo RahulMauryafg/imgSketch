@@ -289,6 +289,7 @@
 			<div class="loginTitle" ng-show="fbMode()">על מנת להזמין את השלט שבחרתם עליכם למלא פרטים, איך תרצו להמשיך?</div>
 			<button class="loginFacebook" ng-click="fbProcess()" ng-hide="uploading" ng-disabled="uploading">&nbsp;</button>
 			<div class="loginLoader" ng-hide="!uploading"><img src="img/loader.gif" height="16" width="16p" style="margin: -3px 0 0 5px;" /> מעלה תמונה לאלבום הפייסבוק שלך ...</div>
+			<div class="errorMSG" ng-hide="!uploadError">תקלה בהתקשרות מול שרתי פייסבוק, אנא נסו שוב<br/>או לחצו <a href="{{downloadUrl}}">כאן</a> להורדת התמונה למחשב</div>
 			<a ng-click="order(true)" ng-show="fbMode()" class="loginSkip">להמשיך מבלי להתחבר לפייסבוק</a>
 		</div>
 	</div>
