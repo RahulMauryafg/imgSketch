@@ -29,7 +29,7 @@ filter('orderType', function() {
         if (input === 'Shirt')
             out = 'חולצה'
         if (input === 'Sign')
-            out = 'שלת לתליה'
+            out = 'שלט לתליה'
         if (input === 'Samsonite')
             out = 'שמשונית'
         return out;

@@ -252,7 +252,7 @@
 }
 
 .ui-dialog-content.ui-widget-content {
-    overflow: hidden;
+    overflow: visible;
     position: relative;
     color: white;
     font-size: 18px;
@@ -281,6 +281,10 @@
 #orderWrapper, #loginWrapper {
     width: 415px;
     margin: 0 auto;
+}
+
+#orderWrapper {
+    margin: -30px auto 0 auto;
 }
 
 #loginWrapper .loginTitle {
@@ -353,13 +357,33 @@
 
 #orderWrapper .order_inputs input[type=text].ng-invalid.ng-dirty, 
 #orderWrapper .order_inputs input[type=email].ng-invalid.ng-dirty,
-#orderWrapper .order_inputs input[type=number].ng-invalid.ng-dirty{
+#orderWrapper .order_inputs input[type=number].ng-invalid.ng-dirty,
+#orderWrapper .order_inputs input[type=tel].ng-invalid.ng-dirty{
     outline: none;
     background: #ffcccc;
 }
 #orderWrapper .order_inputs  input[type=text].ng-valid.ng-dirty,
 #orderWrapper .order_inputs  input[type=email].ng-valid.ng-dirty,
-#orderWrapper .order_inputs  input[type=number].ng-valid.ng-dirty {
+#orderWrapper .order_inputs  input[type=number].ng-valid.ng-dirty,
+{
     outline: none;
     background: #ccffcc;
+}
+
+#orderWrapper .order_inputs input[type=number]::-webkit-outer-spin-button,
+#orderWrapper .order_inputs input[type=number]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+#orderWrapper .order_inputs select {
+    height: 17px;
+    font-size: 12px;
+    color: #444;
+    line-height: 17px;
+    background: white;
+    border: red solid 1px;
+    padding: 0 5px 0 0;
+    display: inline-block;
+    margin: 0;
 }

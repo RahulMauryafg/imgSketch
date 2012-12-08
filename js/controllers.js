@@ -15,6 +15,10 @@ function MainCtrl($scope, $route, $routeParams, $location) {
 			dev: '//gi.mediamagic.co.il/clients/avoda/printingCreator',
 			production: '//212.29.200.117'
 		},
+		payHost: {
+			dev: 'http://dev.shelly.org.il/checkout?',
+			production: 'http://shelly.org.il/checkout?'
+		},
 		school: true,
 		development: false,
 		fb: true,
@@ -57,10 +61,15 @@ function GeneralCtrl($scope,$resource){
 				city: '',
 				zip: '',
 				houseNumber: '',
-				apartmentNumber: ''
+				apartmentNumber: '',
+				personId: 0,
+				amount: 40,
+				payments: 1
+
 			},
 			order: {
-				type: 'Shirt'
+				type: $scope.config.defaultType,
+				size: $scope.config.defaultSize
 			}
 		};
 		$scope.master = angular.copy($scope.formData);
@@ -219,7 +228,7 @@ function GalleryCtrl($scope, $resource) {
 	}
 }
 
-function OrderCtrl($scope){
+function OrderCtrl($scope, $location, $window){
 	$scope.downloadUrl = null;
 	$scope.showSizes = function(){
 		if ($scope.formData != undefined && $scope.formData.order.type === 'Shirt') {
@@ -228,6 +237,14 @@ function OrderCtrl($scope){
 			return true;
 		}
 	}
+
+	$scope.encQuery = function(data) {
+		var ret = [];
+		for (var d in data)
+		ret.push(encodeURIComponent(d) + "=" + encodeURIComponent(data[d]));
+		return ret.join("&");
+	}
+
 	$scope.register = function(){
 		if ($scope.config.development === false) {
 			$scope.orderForm.$invalid = true;
@@ -235,8 +252,25 @@ function OrderCtrl($scope){
 				if ($scope.formData.order.type === 'FacebookCover')
 					$scope.downloadUrl = response.downloadUrl;
 				$('#orderDialog').dialog('close');
-				$('#thankyouDialog').dialog('open');
+				//$('#thankyouDialog').dialog('open');
+				var sendObj = {
+					p_IDNumber: $scope.formData.user.personId,
+					p_amount_agorot: $scope.formData.user.amount * 100,
+					p_payment_purpose: 'donate_campaign',
+					p_redirect: $location.$$absUrl,
+					p_title: 'תרומה למפלגת העבודה',
+					p_payments_enabled: 1,
+					p_payments_number:  $scope.formData.user.payments,
+					p_OrderID: response.orderId
+				}
+				console.log(sendObj);
+				var urlParams = $scope.encQuery(sendObj);
+				var payHost  = ($scope.config.production) ? $scope.config.payHost.production : $scope.config.payHost.dev;
+				var redirectUrl = payHost + urlParams;
+				console.log(redirectUrl);
+				$window.location = redirectUrl;
 				$scope.reset();
+
 			});
 		}
 		else {
@@ -258,6 +292,5 @@ function OrderCtrl($scope){
 		$scope.step(1);
 		$scope.toggleEditMode('text');
 		$scope.$emit('reset');
-		$scope.orderForm.$setPristine();
 	}
 }
