@@ -236,12 +236,14 @@ function GeneralCtrl($scope,$resource,$location){
 function LoginCtrl($scope, $resource) {
 	$scope.uploading = false;
 	$scope.fbState = 0;
+	$scope.hideSkip = false;
 
 	$scope.$on('resetError', function(){
 		$scope.uploadError = false;
 	});
 
 	$scope.$on('fbLogin', function(){
+		$scope.hideSkip = true;
 		FB.getLoginStatus(function(response){
 			if (response.status === 'connected'){
 				console.log('logged in and authorized')
@@ -352,6 +354,7 @@ function LoginCtrl($scope, $resource) {
 	$scope.order = function(skip){
 		$scope.uploadError = false;
 		$scope.uploading = false;
+		$scope.hideSkip = false;
 		if (skip === true) {
 			$('#loginDialog').dialog('close');
 			$('#orderDialog').dialog('open');	
@@ -388,9 +391,9 @@ function GalleryCtrl($scope, $resource) {
 		$scope.pagination = {};
 		$scope.pagination.pages = [];
 		var key = 0;
-		for (var i=Math.min($scope.galleryData.currentPage, $scope.galleryData.pages-9);i<=Math.min($scope.galleryData.currentPage+9, $scope.galleryData.pages);i++){
-			console.log(Math.min($scope.galleryData.currentPage, $scope.galleryData.pages-9));
-			console.log(Math.min($scope.galleryData.currentPage+9, $scope.galleryData.pages));
+		for (var i=Math.min($scope.galleryData.currentPage, 
+			$scope.galleryData.pages-9);i<=Math.min($scope.galleryData.currentPage+9, 
+			$scope.galleryData.pages);i++){
 			$scope.pagination.pages[key] = {};
 			$scope.pagination.pages[key].number = i;
 			if (i === $scope.galleryData.currentPage)
@@ -399,7 +402,6 @@ function GalleryCtrl($scope, $resource) {
 				$scope.pagination.pages[key].active = false;
 			key++;
 		}
-		console.log($scope.pagination.pages);
 	}
 
 	$scope.zoom = function(index){

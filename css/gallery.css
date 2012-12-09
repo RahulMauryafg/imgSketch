@@ -124,7 +124,6 @@
 	font-weight: bold;
 	text-decoration: underline;
 }
-
 #galleryDialog #imagePop_share {
 	position: absolute;
 	bottom: 7px;
@@ -140,7 +139,6 @@
 	width: 400px;
 	text-align: center;
 }
-
 #galleryControls a {
 	color: white;
 	text-decoration: none;
