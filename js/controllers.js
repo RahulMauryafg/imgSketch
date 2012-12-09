@@ -391,8 +391,8 @@ function GalleryCtrl($scope, $resource) {
 		$scope.pagination = {};
 		$scope.pagination.pages = [];
 		var key = 0;
-		for (var i=Math.min($scope.galleryData.currentPage, 
-			$scope.galleryData.pages-9);i<=Math.min($scope.galleryData.currentPage+9, 
+		for (var i=Math.max(Math.min($scope.galleryData.currentPage,$scope.galleryData.pages-9), 1);
+				i<=Math.min($scope.galleryData.currentPage+9, 
 			$scope.galleryData.pages);i++){
 			$scope.pagination.pages[key] = {};
 			$scope.pagination.pages[key].number = i;

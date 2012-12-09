@@ -15,6 +15,10 @@
 	padding: 5px 12px 13px 6px;
 }
 
+.galleryImage img {
+	cursor: pointer;
+}
+
 .galleryImage .galleryImage_name {
 	position: absolute;
 	bottom: 16px;
@@ -124,7 +128,23 @@
 	font-weight: bold;
 	text-decoration: underline;
 }
+#galleryDialog #imagePop_sep {
+	position: absolute;
+	bottom: 7px;
+	color: #ac0400;
+	font-size: 24px;
+	left: 188px;
+}
 #galleryDialog #imagePop_share {
+	position: absolute;
+	bottom: 7px;
+	color: #ac0400;
+	font-size: 24px;
+	left: 200px;
+	font-weight: bold;
+}
+
+#galleryDialog #imagePop_create {
 	position: absolute;
 	bottom: 7px;
 	color: #ac0400;
@@ -132,6 +152,7 @@
 	left: 10px;
 	font-weight: bold;
 }
+
 #galleryControls {
 	position: relative;
 	top: 450px;
