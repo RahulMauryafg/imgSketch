@@ -12,7 +12,8 @@ function MainCtrl($scope, $route, $routeParams, $location, $window) {
 	$scope.config = {
 		production: false,
 		hosts: {
-			dev: '//gi.mediamagic.co.il/clients/avoda/printingCreator',
+			dev: '//node.mmdev.co.il:8080',
+			staging: '//gi.mediamagic.co.il/clients/avoda/printingCreator',
 			production: '//www.myshelly.org.il'
 		},
 		payHost: {
@@ -29,14 +30,21 @@ function MainCtrl($scope, $route, $routeParams, $location, $window) {
 			perPage: 4
 		}
 	}
-	if ($location.$$host != 'node.mmdev.co.il' && $location.$$host != 'gi.mediamagic.co.il'){
-		$scope.config.production = true;
-	}
-	$scope.host = ($scope.config.production === false) ? 
-		$scope.config.hosts.dev :
-		$scope.config.hosts.production;
 
-	console.log($scope.host);
+	if ($location.$$host == 'node.mmdev.co.il')
+		$scope.config.production = 'dev';
+	else if ($location.$$host == 'gi.mediamagic.co.il')
+		$scope.config.production = 'staging';
+	else 
+		$scope.config.production = 'production';
+
+	if ($scope.config.production === 'dev')
+		$scope.host = $scope.config.hosts.dev;
+	else if ($scope.config.production === 'staging')
+		$scope.host = $scope.config.hosts.staging;
+	else 
+		$scope.host = $scope.config.hosts.production;
+
 	$scope.shareFB = function() {
 		$window.open('http://www.facebook.com/sharer.php?u=' 
 						+ encodeURIComponent($location.$$protocol + ':' + $scope.host 
@@ -54,9 +62,12 @@ function MainCtrl($scope, $route, $routeParams, $location, $window) {
 
 function GeneralCtrl($scope,$resource,$location){
 	//Constructor
-	//TODO: init formdata object prior to settings load,
-	//update imageTemplate property after settings init
-	$scope.Settings = $resource($scope.host + '/resources/settings', {});
+	var settingsSource = ($scope.config.production === 'dev' || $scope.config.production === 'staging') ?
+		$scope.config.hosts.staging + '/resources/settings':
+		$scope.config.hosts.production + '/resources/settings';
+
+	console.log(settingsSource);
+	$scope.Settings = $resource(settingsSource, {});
 	$scope.settings = $scope.Settings.get(function(r){ 
 		$scope.settings = r;
 		$scope.currentTemplate = $scope.settings.templates[0];
@@ -426,9 +437,9 @@ function OrderCtrl($scope, $location, $window){
 						p_OrderID: response.orderId
 					}
 					var urlParams = $scope.encQuery(sendObj);
-					var payHost  = ($scope.config.production) ? 
-						$scope.config.payHost.production : 
-						$scope.config.payHost.dev;
+					var payHost  = ($scope.config.production === 'dev' || $scope.config.production === 'staging') ? 
+						$scope.config.payHost.dev : 
+						$scope.config.payHost.production;
 					var redirectUrl = payHost + urlParams;
 					$window.location = redirectUrl;
 					$scope.reset();
