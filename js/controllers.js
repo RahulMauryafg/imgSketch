@@ -32,9 +32,11 @@ function MainCtrl($scope, $route, $routeParams, $location, $window) {
 	if ($location.$$host != 'node.mmdev.co.il' && $location.$$host != 'gi.mediamagic.co.il'){
 		$scope.config.production = true;
 	}
-	$scope.host = '//' + ($scope.config.production === false) ? 
+	$scope.host = ($scope.config.production === false) ? 
 		$scope.config.hosts.dev :
 		$scope.config.hosts.production;
+
+	console.log($scope.host);
 	$scope.shareFB = function() {
 		$window.open('http://www.facebook.com/sharer.php?u=' 
 						+ encodeURIComponent($location.$$protocol + ':' + $scope.host 
