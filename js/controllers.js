@@ -29,7 +29,7 @@ function MainCtrl($scope, $route, $routeParams, $location, $window) {
 			perPage: 4
 		}
 	}
-	if ($location.$$host != 'node.mmdev.co.il' || $location.$$host != 'gi.mediamagic.co.il'){
+	if ($location.$$host != 'node.mmdev.co.il' && $location.$$host != 'gi.mediamagic.co.il'){
 		$scope.config.production = true;
 	}
 	$scope.host = '//' + ($scope.config.production === false) ? 
