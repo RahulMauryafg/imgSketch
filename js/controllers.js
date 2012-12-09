@@ -29,6 +29,9 @@ function MainCtrl($scope, $route, $routeParams, $location, $window) {
 			perPage: 4
 		}
 	}
+	if ($location.$$host != 'node.mmdev.co.il' || $location.$$host != 'gi.mediamagic.co.il'){
+		$scope.config.production = true;
+	}
 	$scope.host = '//' + ($scope.config.production === false) ? 
 		$scope.config.hosts.dev :
 		$scope.config.hosts.production;
