@@ -421,3 +421,7 @@
     display: inline-block;
     margin: 0;
 }
+
+#footer #logout {
+    right: 192px;
+}

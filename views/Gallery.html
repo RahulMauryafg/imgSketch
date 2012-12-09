@@ -16,29 +16,51 @@
 				height="109" 
 				ng-click="zoom($index)"/>
 			<div 
-				class="galleryImageName">
-				{{image.name}}
-			</div>
-			<div 
-				class="galleryImageZoom" 
-				ng-click="zoom($index)">
-				zoom
-			</div>
+				class="galleryImage_name">{{image.name}}</div>
+			<div
+				class="galleryImage_zoom" 
+				ng-click="zoom($index)"></div>
+			<div
+				class="galleryImage_share" 
+				ng-click="shareFB(image.imageId)">שתפו</div>
 		</div>
 	</div>
 	<div id="galleryControls">
-		<a ng-click="page('next')">next</a>
-		<a ng-click="page('prev')">prev</a>
+		<a 
+			ng-click="page('prev')">&lt;</a>		
+		<span 
+			ng-repeat="ipage in pagination.pages">
+			<a 
+				class="number {{ipage.active}}"
+				ng-disabled="{{ipage.active}}"
+				ng-click="page(ipage.number)">{{ipage.number}}</a>|
+		</span>
+		<a 
+			ng-click="page('next')">&gt;</a>
 	</div>
-	<a href="#/main">home</a>
+	<div id="footer">
+		<a 
+			id="share" 
+			ng-click="shareFB()"></a>
+		<a 
+			id="navHome" 
+			href="#/main"></a>
+		<a 
+			id="logout" 
+			ng-show="formData.user.fbUid > 0" 
+			ng-click="$broadcast('fbLogout')">להתנתק מפייסבוק</a>
+	</div>
 </div>
-<div
-	id="galleryDialog"
-	ui-jq="dialog"
-	ui-options="{title:'please login',autoOpen: false, height: 310, width: 700, modal: true, resizable: false }">
-	<img 
-		ng-src="{{currentImage.imagePath}}" width="650" height="241" />
+<div>
+	<div
+		id="galleryDialog"
+		ui-jq="dialog"
+		ui-options="{title:'',autoOpen: false, height: 304, width: 668, modal: true, resizable: false, draggable: false,  position: ['center', 110] }">
+		<img 
+			ng-src="{{currentImage.imagePath}}" 
+			width="650"
+			height="241" />
+		<span id="imagePop_name" >{{currentImage.name}}</span>
+		<a id="imagePop_share" ng-click="shareFB()">שתפו</a>
+	</div>
 </div>
-<script>
-	$('#galleryDialog').on("close", function(event, ui){alert('test')});
-</script>

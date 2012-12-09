@@ -1,5 +1,6 @@
 <script>
 	$('#galleryDialog').dialog('destroy');
+
 	$('#imageTextInput').die('keyup paste focus').live('keyup paste focus', function (e) {
         $(this).val($(this).val().replace(/([^ 0-9א-ת!?.,\n\r])/g, "")).trigger('change');
         var rows = $(this).val().split('\n');
@@ -39,91 +40,6 @@
 		<input type="text" ng-hide="true" name="textLeft" ng-model="formData.payload.imageText.posX" id="textLeft" />
 		<input type="text" ng-hide="true" name="textHeight" ng-model="formData.payload.imageText.height" id="textHeight" />
 		<input type="text" ng-hide="true" name="textWidth" ng-model="formData.payload.imageText.width" id="textWidth" />
-		<style type="text/css">
-			@font-face {
-				font-family: ghaim;
-				src: url("fonts/GHAIM.eot");
-			}
-			@font-face {
-				font-family: ghaim;
-				src: url("fonts/GHAIM.ttf");
-			}
-			@font-face {
-				font-family: 'sixseven_old';
-				src: url('fonts/sixtysevenfot-bold-webfont.eot');
-				src: url('fonts/sixtysevenfot-bold-webfont.eot?#iefix') format('embedded-opentype'),
-				url('fonts/sixtysevenfot-bold-webfont.woff') format('woff'),
-				url('fonts/sixtysevenfot-bold-webfont.ttf') format('truetype'),
-				url('fonts/sixtysevenfot-bold-webfont.svg#sixtysevenfot_oldregular') format('svg');
-				font-weight: normal;
-				font-style: normal;
-			}
-			@font-face {
-				font-family: 'sixseven_regular';
-				src: url('fonts/sixtysevenfot-regular-webfont.eot');
-				src: url('fonts/sixtysevenfot-regular-webfont.eot?#iefix') format('embedded-opentype'),
-				url('fonts/sixtysevenfot-regular-webfont.woff') format('woff'),
-				url('fonts/sixtysevenfot-regular-webfont.ttf') format('truetype'),
-				url('fonts/sixtysevenfot-regular-webfont.svg#sixtysevenfot_regularregular') format('svg');
-				font-weight: normal;
-				font-style: normal;
-			}
-			@font-face {
-			    font-family: 'aduma';
-			    src: url('fonts/aduma-light-webfont.eot');
-			    src: url('fonts/aduma-light-webfont.eot?#iefix') format('embedded-opentype'),
-			         url('fonts/aduma-light-webfont.woff') format('woff'),
-			         url('fonts/aduma-light-webfont.ttf') format('truetype'),
-			         url('fonts/aduma-light-webfont.svg#adumalight') format('svg');
-			    font-weight: 300;
-			    font-style: normal;
-			}
-
-			@font-face {
-			    font-family: 'aduma';
-			    src: url('fonts/aduma-regular-webfont.eot');
-			    src: url('fonts/aduma-regular-webfont.eot?#iefix') format('embedded-opentype'),
-			         url('fonts/aduma-regular-webfont.woff') format('woff'),
-			         url('fonts/aduma-regular-webfont.ttf') format('truetype'),
-			         url('fonts/aduma-regular-webfont.svg#adumaregular') format('svg');
-			    font-weight: 400;
-			    font-style: normal;
-			}
-
-			@font-face {
-			    font-family: 'aduma';
-			    src: url('fonts/aduma-medium-webfont.eot');
-			    src: url('fonts/aduma-medium-webfont.eot?#iefix') format('embedded-opentype'),
-			         url('fonts/aduma-medium-webfont.woff') format('woff'),
-			         url('fonts/aduma-medium-webfont.ttf') format('truetype'),
-			         url('fonts/aduma-medium-webfont.svg#adumamedium') format('svg');
-			    font-weight: 500;
-			    font-style: normal;
-			}
-
-			@font-face {
-			    font-family: 'aduma';
-			    src: url('fonts/aduma-bold-webfont.eot');
-			    src: url('fonts/aduma-bold-webfont.eot?#iefix') format('embedded-opentype'),
-			         url('fonts/aduma-bold-webfont.woff') format('woff'),
-			         url('fonts/aduma-bold-webfont.ttf') format('truetype'),
-			         url('fonts/aduma-bold-webfont.svg#adumabold') format('svg');
-			    font-weight: 700;
-			    font-style: normal;
-			}
-
-			@font-face {
-			    font-family: 'aduma';
-			    src: url('fonts/aduma-heavy-webfont.eot');
-			    src: url('fonts/aduma-heavy-webfont.eot?#iefix') format('embedded-opentype'),
-			         url('fonts/aduma-heavy-webfont.woff') format('woff'),
-			         url('fonts/aduma-heavy-webfont.ttf') format('truetype'),
-			         url('fonts/aduma-heavy-webfont.svg#adumaheavy') format('svg');
-			    font-weight: 900;
-			    font-style: normal;
-			}
-		</style>
-		
 		<div id="templateHeader" style="font-size: 30px; position: absolute; top: 80px; right: 57px; " ng-show="stepCheck(1)">1.עצבו את המסר שלכם:</div>
 		<div class="templatePreview">
 			<textarea
@@ -277,11 +193,10 @@
 		</div>
 	</form>
 	<div id="footer">
-		<div><a id="share" ng-click="shareFB()"></a></div>
-		<div ng-hide="true"><a href="#/gallery"></a></div>
-		<div><a id="logout" ng-show="formData.user.fbUid > 0" ng-click="$broadcast('fbLogout')">להתנתק מפייסבוק</a></div>
+		<a id="share" ng-click="shareFB()"></a>
+		<a id="navGallery" href="#/gallery"></a>
+		<a id="logout" ng-show="formData.user.fbUid > 0" ng-click="$broadcast('fbLogout')">להתנתק מפייסבוק</a>
 	</div>
-	<script src="js/main.js"></script>
 </div>
 
 <!-- DIALOGS -->

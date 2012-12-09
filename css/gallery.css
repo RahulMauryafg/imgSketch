@@ -1,18 +1,41 @@
 #galleryWrapper {
-    width: 673px;
-    height: 330px;
-    overflow: hidden;
-    position: absolute;
-    top: 115px;
-    left: 54px;
+	width: 673px;
+	height: 330px;
+	overflow: hidden;
+	position: absolute;
+	top: 115px;
+	left: 54px;
 }
 
 .galleryImage {
 	width: 295px;
-	height: 109px;
+	height: 150px;
 	padding: ;
-	background: url(../img/galleryTpl_bg.png) no-repeat center center;
+	background: url(../img/galleryTpl_bg.png) no-repeat top center;
 	padding: 5px 12px 13px 6px;
+}
+
+.galleryImage .galleryImage_name {
+	position: absolute;
+	bottom: 16px;
+	right: 43px;
+}
+
+.galleryImage .galleryImage_zoom {
+	position: absolute;
+	bottom: 16px;
+	width: 24px;
+	height: 20px;
+	background: transparent url(../img/galleryImage_zoom.png) no-repeat center center;
+	cursor: pointer;
+}
+
+.galleryImage .galleryImage_share {
+	position: absolute;
+	bottom: 16px;
+	left: 0;
+	text-decoration: underline;
+	cursor: pointer;
 }
 
 .galleryImage.img_0 {
@@ -39,4 +62,97 @@
 	left: 0;
 }
 
+#footer #logout {
+	right: 222px;
+}
 
+.ui-dialog {
+	background: transparent url(../img/galleryPopup_bg.jpg) no-repeat center center;
+	border: none;
+	border-radius: 0;
+	padding: 0;
+	margin: 0;
+	overflow: hidden;
+}
+.ui-dialog-titlebar {
+	border: none;
+	background: none;
+}
+
+.ui-dialog-content.ui-widget-content {
+	overflow: visible;
+	position: relative;
+	color: white;
+	font-size: 18px;
+	text-align: right;
+	font-family: 'aduma';
+}
+
+.ui-dialog .ui-dialog-titlebar-close {
+	position: absolute;
+	width: 33px;
+	height: 33px;
+	background: transparent url(../img/galleryPopup_close.png) no-repeat center center;
+	border: none;
+	padding: 0;
+	top: 0;
+	right: 636px;
+	margin: 0;
+	display: block;
+	border-radius: 0;
+	z-index: 2;
+}
+
+.ui-dialog .ui-dialog-titlebar-close span {
+	display: none;
+}
+
+#galleryDialog img {
+	display: block;
+	position: absolute;
+	top: -18px;
+	left: 9px;
+	z-index: 1;
+}
+
+#galleryDialog #imagePop_name {
+	position: absolute;
+	bottom: 7px;
+	color: #0748a7;
+	font-size: 24px;
+	right: 12px;
+	font-weight: bold;
+	text-decoration: underline;
+}
+
+#galleryDialog #imagePop_share {
+	position: absolute;
+	bottom: 7px;
+	color: #ac0400;
+	font-size: 24px;
+	left: 10px;
+	font-weight: bold;
+}
+#galleryControls {
+	position: relative;
+	top: 450px;
+	margin: 0 auto;
+	width: 400px;
+	text-align: center;
+}
+
+#galleryControls a {
+	color: white;
+	text-decoration: none;
+	font-size: 18px;
+}
+#galleryControls a.number{
+	display: inline-block;
+	width: 20px;
+	text-align: center;
+}
+
+#galleryControls a.number.true{
+	text-decoration: underline;
+	cursor: default;
+}

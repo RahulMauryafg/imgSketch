@@ -6,7 +6,7 @@ config(['$routeProvider', '$locationProvider', function($routeProvider, $locatio
         //when('/home', {templateUrl: 'views/Home.html', controller: HomeCtrl, name:'Main'}).
 		when('/main', {templateUrl: 'views/Main.html', controller: GeneralCtrl, name:'Main'}).
 		//when('/about', {templateUrl: 'views/About.html', controller: AboutCtrl, name: 'About'}).
-		//when('/gallery', {templateUrl: 'views/Gallery.html', controller: GalleryCtrl, name:'Gallery'}).
+		when('/gallery', {templateUrl: 'views/Gallery.html', controller: GalleryCtrl, name:'Gallery'}).
 		otherwise({redirectTo: '/main'});
 	//$locationProvider.html5Mode(true);
 }]).

@@ -45,13 +45,13 @@ function MainCtrl($scope, $route, $routeParams, $location, $window) {
 	else 
 		$scope.host = $scope.config.hosts.production;
 
-	$scope.shareFB = function() {
-		$window.open('http://www.facebook.com/sharer.php?u=' 
-						+ encodeURIComponent($location.$$protocol + ':' + $scope.host 
-						+ '?' 
-						+ $.param({ random: Math.floor((Math.random()*100000000)+1)})),
-					'sharer', 
-					'toolbar=0,status=0,width=656,height=436');
+	$scope.shareFB = function(imageId) {
+		var shareLink = $location.$$protocol + ':' + $scope.host;
+		if (imageId != undefined)
+			shareLink = shareLink + '/message/'+ imageId;
+		$window.open('//www.facebook.com/sharer.php?u=' + 
+			encodeURIComponent(shareLink + '?random=' + Math.floor((Math.random()*100000000)+1)),
+			'sharer','toolbar=0,status=0,width=656,height=436');
 	}
 }
 
@@ -62,11 +62,10 @@ function MainCtrl($scope, $route, $routeParams, $location, $window) {
 
 function GeneralCtrl($scope,$resource,$location){
 	//Constructor
-	var settingsSource = ($scope.config.production === 'dev' || $scope.config.production === 'staging') ?
+	var settingsSource = ($scope.config.production === 'dev' 
+		|| $scope.config.production === 'staging') ?
 		$scope.config.hosts.staging + '/resources/settings':
 		$scope.config.hosts.production + '/resources/settings';
-
-	console.log(settingsSource);
 	$scope.Settings = $resource(settingsSource, {});
 	$scope.settings = $scope.Settings.get(function(r){ 
 		$scope.settings = r;
@@ -172,8 +171,10 @@ function GeneralCtrl($scope,$resource,$location){
 		var json = $scope.sketchpad.json();
 		//TODO: check if $apply will fix the need for triggers
 		(json.length > 2) ?
-			$("#sketchData").val(escape($('#editor').html())).trigger('input').trigger('change') :
-			$("#sketchData").val('').trigger('input').trigger('change');
+			$("#sketchData").val(escape($('#editor').html()))
+			.trigger('input').trigger('change') :
+			$("#sketchData").val('').trigger('input')
+			.trigger('change');
 	});
 	
 	//Form flow controls
@@ -312,10 +313,14 @@ function LoginCtrl($scope, $resource) {
 	$scope.uploadToFB = function(response){
 		$scope.downloadUrl = null;
 		$scope.uploadError = false;
+		var settingsSource = ($scope.config.production === 'dev' 
+			|| $scope.config.production === 'staging') ?
+			$scope.config.hosts.staging + '/Resources/Printings/':
+			$scope.config.hosts.production + '/Resources/Printings/';
 		FB.api('/me/photos', 'post', { 
-			name: "זה המסר שייצרתי לבחירות הקרובות אתם מוזמנים להצטרף אלי וליצור את השלט שלכם באפליקציה של תומכי שלי יחימוביץ' ומפלגת העבודה. http://www.myshelly.org.il",
-			url: 'http:' + $scope.host + '/Resources/Printings/' 
-				+ response.downloadUrl.split('=')[1]
+			name: "זה המסר שייצרתי לבחירות הקרובות אתם מוזמנים להצטרף אלי וליצור את השלט שלכם " +
+			"באפליקציה של תומכי שלי יחימוביץ' ומפלגת העבודה. http://www.myshelly.org.il",
+			url: 'http:' + settingsSource + response.downloadUrl.split('=')[1]
 		}, function(resp){
 			$scope.uploading = false;
 			if(resp.id != undefined){
@@ -360,39 +365,69 @@ function LoginCtrl($scope, $resource) {
 }
 
 function GalleryCtrl($scope, $resource) {
+	var settingsSource = ($scope.config.production === 'dev' 
+		|| $scope.config.production === 'staging') ?
+		$scope.config.hosts.staging + '/resources/images':
+		$scope.config.hosts.production + '/resources/images';
 	$scope.currentImage = {};
-	$scope.Gallery = $resource($scope.host + '/resources/images', {});
+	$scope.Gallery = $resource(settingsSource, {});
 	$scope.gallery = $scope.Gallery.query(function(r){
 		$scope.gallery = r;
 		$scope.galleryData = {
 			total: r.length,
-			pages: Math.ceil(r.length/$scope.settings.gallery.perPage),
+			pages: Math.ceil(r.length/$scope.config.gallery.perPage),
 			currentPage: 1,
 			startIndex: 0,
-			endIndex: $scope.settings.gallery.perPage
+			endIndex: $scope.config.gallery.perPage
 		}
 		$scope.getCurrentSet($scope.galleryData.currentPage);
+		$scope.paginate();
 	});
 
+	$scope.paginate = function(){
+		$scope.pagination = {};
+		$scope.pagination.pages = [];
+		var key = 0;
+		for (var i=Math.min($scope.galleryData.currentPage, $scope.galleryData.pages-9);i<=Math.min($scope.galleryData.currentPage+9, $scope.galleryData.pages);i++){
+			console.log(Math.min($scope.galleryData.currentPage, $scope.galleryData.pages-9));
+			console.log(Math.min($scope.galleryData.currentPage+9, $scope.galleryData.pages));
+			$scope.pagination.pages[key] = {};
+			$scope.pagination.pages[key].number = i;
+			if (i === $scope.galleryData.currentPage)
+				$scope.pagination.pages[key].active = true;
+			else
+				$scope.pagination.pages[key].active = false;
+			key++;
+		}
+		console.log($scope.pagination.pages);
+	}
+
 	$scope.zoom = function(index){
+		$scope.currentImage = "";
 		$scope.currentImage = $scope.currentSet[index];
-		$('#galleryDialog').dialog('open');
+		setTimeout(function(){
+			$('#galleryDialog').dialog('open');
+		}, 100);
 	}
 
 	$scope.page = function(action){
-		if (action === 'next' 
-				&& $scope.galleryData.currentPage < $scope.galleryData.pages)
+		if (action === 'next'
+				&& $scope.galleryData.currentPage < $scope.galleryData.pages) {
 			$scope.galleryData.currentPage++;
-		if (action === 'prev' 
-				&& $scope.galleryData.currentPage > 1)
+		} else if (action === 'prev' 
+				&& $scope.galleryData.currentPage > 1) {
 			$scope.galleryData.currentPage--;
+		} else if (action > 0) {
+			$scope.galleryData.currentPage = action;
+		}
 		$scope.getCurrentSet($scope.galleryData.currentPage);
+		$scope.paginate();
 	}
 
 	$scope.getCurrentSet = function(page){
-		var newStartindex = (page-1)*$scope.settings.gallery.perPage;
+		var newStartindex = (page-1)*$scope.config.gallery.perPage;
 		$scope.currentSet = $scope.gallery.slice(newStartindex,newStartindex 
-			+ $scope.settings.gallery.perPage);
+			+ $scope.config.gallery.perPage);
 	}
 }
 
@@ -437,7 +472,8 @@ function OrderCtrl($scope, $location, $window){
 						p_OrderID: response.orderId
 					}
 					var urlParams = $scope.encQuery(sendObj);
-					var payHost  = ($scope.config.production === 'dev' || $scope.config.production === 'staging') ? 
+					var payHost  = ($scope.config.production === 'dev' 
+						|| $scope.config.production === 'staging') ? 
 						$scope.config.payHost.dev : 
 						$scope.config.payHost.production;
 					var redirectUrl = payHost + urlParams;
