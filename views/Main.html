@@ -1,6 +1,6 @@
 <script>
 	$('#galleryDialog').dialog('destroy');
-	$('#imageTextInput').die('keyup paste focus').live('keyup paste focus', function (e) {
+	$('#imageTextInput').die('keydown keyup paste focus').live('keydown keyup paste focus', function (e) {
         $(this).val($(this).val().replace(/([^ 0-9א-ת!?.,\n\r])/g, "")).trigger('change');
         var rows = $(this).val().split('\n');
         for(var i=0; i<rows.length;i++){
@@ -220,7 +220,7 @@
 					<input
 						type="radio"
 						name="orderType"
-						value="Samsonite"
+						value="Shimshonit"
 						ng-model="formData.order.type"
 						id="order_samsonite" checked/>
 					<label
@@ -232,12 +232,12 @@
 					<input
 						type="radio"
 						name="orderType"
-						value="Sign"
+						value="VehicleSunScreen"
 						ng-model="formData.order.type"
 						id="order_sign"/>
 					<label
 						for="order_sign">
-						שלט לתליה
+						צילון לרכב
 					</label>
 				</div>
 				<div class="orderPrintOption">
@@ -287,8 +287,8 @@
 		<div id="loginWrapper">
 			<div class="loginTitle" ng-show="!fbMode()">התחברו להורדת תמונת COVER</div>
 			<div class="loginTitle" ng-show="fbMode()">על מנת להזמין את השלט שבחרתם עליכם למלא פרטים, איך תרצו להמשיך?</div>
-			<button class="loginFacebook" ng-click="fbProcess()" ng-hide="uploading" ng-disabled="uploading">&nbsp;</button>
-			<div class="loginLoader" ng-hide="!uploading"><img src="img/loader.gif" height="16" width="16p" style="margin: -3px 0 0 5px;" /> מעלה תמונה לאלבום הפייסבוק שלך ...</div>
+			<button class="loginFacebook" ng-click="$emit('fbLogin'); uploading = true;" ng-hide="uploading" ng-disabled="uploading">&nbsp;</button>
+			<div class="loginLoader" ng-hide="!uploading"><img src="img/loader.gif" height="16" width="16p" style="margin: -3px 0 0 5px;" /> תקשורת מול פייסבוק ...</div>
 			<div class="errorMSG" ng-hide="!uploadError">תקלה בהתקשרות מול שרתי פייסבוק, אנא נסו שוב<br/>או לחצו <a href="{{downloadUrl}}">כאן</a> להורדת התמונה למחשב</div>
 			<a ng-click="order(true)" ng-show="fbMode()" class="loginSkip">להמשיך מבלי להתחבר לפייסבוק</a>
 		</div>
@@ -450,7 +450,7 @@
 								name="zip"
 								placeholder=""
 								maxlength="7"
-								ng-pattern="/[0-9]{7}/"
+								ng-pattern="/[0-9]{2}/"
 								ng-model="formData.user.zip"/>
 						</div>
 						<div style="position: relative; height: 57px;" class="clearfix">
@@ -476,7 +476,7 @@
 				<div ng-show="checkOrderType()">
 					<div class="thankyouTitle download">
 						תודה בקשתכם התקבלה.
-						<a id="coverLink" href="//www.facebook.com/djabor?preview_cover={{photoId}}">&nbsp;</a>
+						<a id="coverLink" href="//www.facebook.com/me?preview_cover={{photoId}}">&nbsp;</a>
 					</div>
 					<div id="downloadLink">
 						או לחצו <a href="{{downloadUrl}}">כאן</a> להורדת התמונה למחשב

@@ -13,7 +13,7 @@ function MainCtrl($scope, $route, $routeParams, $location, $window) {
 		production: false,
 		hosts: {
 			dev: '//gi.mediamagic.co.il/clients/avoda/printingCreator',
-			production: '//212.29.200.117'
+			production: '//www.myshelly.org.il'
 		},
 		payHost: {
 			dev: 'http://dev.shelly.org.il/checkout?',
@@ -29,12 +29,12 @@ function MainCtrl($scope, $route, $routeParams, $location, $window) {
 			perPage: 4
 		}
 	}
-	$scope.host = ($scope.config.production) ? 
-		$scope.config.hosts.production : 
-		$scope.config.hosts.dev;
-	$scope.shareFB = function(){
+	$scope.host = '//' + ($scope.config.production === false) ? 
+		$scope.config.hosts.dev :
+		$scope.config.hosts.production;
+	$scope.shareFB = function() {
 		$window.open('http://www.facebook.com/sharer.php?u=' 
-						+ encodeURIComponent($scope.host 
+						+ encodeURIComponent($location.$$protocol + ':' + $scope.host 
 						+ '?' 
 						+ $.param({ random: Math.floor((Math.random()*100000000)+1)})),
 					'sharer', 
@@ -47,7 +47,7 @@ function MainCtrl($scope, $route, $routeParams, $location, $window) {
  * Controlling general settings
 **/
 
-function GeneralCtrl($scope,$resource){
+function GeneralCtrl($scope,$resource,$location){
 	//Constructor
 	//TODO: init formdata object prior to settings load,
 	//update imageTemplate property after settings init
@@ -55,6 +55,8 @@ function GeneralCtrl($scope,$resource){
 	$scope.settings = $scope.Settings.get(function(r){ 
 		$scope.settings = r;
 		$scope.currentTemplate = $scope.settings.templates[0];
+		if ($location.$$protocol === 'https')
+			$scope.settings.host = $scope.settings.host.replace(/http/, 'https');
 		$scope.Api = $resource($scope.settings.host 
 			+ 'api/:action', {});
 		$scope.Rest = $resource($scope.settings.host 
@@ -129,6 +131,12 @@ function GeneralCtrl($scope,$resource){
 		}
 	}
 
+	$scope.svgFix = function(){
+		var paper = $scope.sketchpad.paper();
+		var svg = paper.toSVG();
+		return svg;
+	}
+
 	$scope.$on('photofinish', function(e, obj){
 		$scope.photoId = obj.id;
 		$scope.downloadUrl = obj.downloadUrl;
@@ -160,7 +168,7 @@ function GeneralCtrl($scope,$resource){
 	$scope.step = function(step){
 		if ($scope.config.selectType === true) {
 			$scope.currentStep = step;
-			if (step >= 2){
+			if (step >= 2) {
 				$scope.toggleDraw = false;
 				$scope.toggleText = true;
 				$scope.sketchpad.editing(false);
@@ -184,7 +192,7 @@ function GeneralCtrl($scope,$resource){
 		}
 		if ($scope.config.fb) {
 			$('#loginDialog').dialog('open');
-			$scope.$broadcast('fbLogin');
+			$scope.$broadcast('resetError');
 		} else {
 			$('#orderDialog').dialog('open');
 		}
@@ -211,12 +219,15 @@ function LoginCtrl($scope, $resource) {
 	$scope.uploading = false;
 	$scope.fbState = 0;
 
+	$scope.$on('resetError', function(){
+		$scope.uploadError = false;
+	});
+
 	$scope.$on('fbLogin', function(){
 		FB.getLoginStatus(function(response){
 			if (response.status === 'connected'){
 				console.log('logged in and authorized')
 				$scope.fbState = 2;
-				$scope.fbProcess();
 			} else if (response.status === 'not_authorized') {
 				console.log('logged in not authorized')
 				$scope.fbState = 1;
@@ -225,6 +236,7 @@ function LoginCtrl($scope, $resource) {
 				$scope.fbState = 0;
 			}
 			console.log('fblogin state = ' + $scope.fbState);
+			$scope.fbProcess();
 		});
 	});
 
@@ -251,7 +263,7 @@ function LoginCtrl($scope, $resource) {
 					$scope.order(false);
 				} else if ($scope.fbMode() === false){
 					console.log('order type: COVER -> upload image -> cb');
-
+					$scope.formData.payload.imageData.data = $scope.svgFix();
 					var userObj = {
 						user: {
 							fbUid: $scope.formData.user.fbUid,
@@ -284,7 +296,7 @@ function LoginCtrl($scope, $resource) {
 		$scope.downloadUrl = null;
 		$scope.uploadError = false;
 		FB.api('/me/photos', 'post', { 
-			message: 'test',
+			name: "זה המסר שייצרתי לבחירות הקרובות אתם מוזמנים להצטרף אלי וליצור את השלט שלכם באפליקציה של תומכי שלי יחימוביץ' ומפלגת העבודה. http://www.myshelly.org.il",
 			url: 'http:' + $scope.host + '/Resources/Printings/' 
 				+ response.downloadUrl.split('=')[1]
 		}, function(resp){
@@ -387,6 +399,7 @@ function OrderCtrl($scope, $location, $window){
 		$scope.uploading = true;
 		if ($scope.config.development === false) {
 			$scope.orderForm.$invalid = true;
+			$scope.formData.payload.imageData.data = $scope.svgFix();
 			$scope.Rest.save({collection: 'order'}, $scope.formData, 
 				function(response){
 					$('#orderDialog').dialog('close');

@@ -28,9 +28,9 @@ filter('orderType', function() {
             out = 'סטיקר';
         if (input === 'Shirt')
             out = 'חולצה'
-        if (input === 'Sign')
-            out = 'שלט לתליה'
-        if (input === 'Samsonite')
+        if (input === 'VehicleSunScreen')
+            out = 'צילון לרכב'
+        if (input === 'Shimshonit')
             out = 'שמשונית'
         return out;
     }
