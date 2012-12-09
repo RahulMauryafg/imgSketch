@@ -31,7 +31,7 @@ filter('orderType', function() {
         if (input === 'VehicleSunScreen')
             out = 'צילון לרכב'
         if (input === 'Shimshonit')
-            out = 'שמשונית'
+            out = 'שלט לתליה'
         return out;
     }
 });

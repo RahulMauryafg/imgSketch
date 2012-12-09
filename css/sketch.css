@@ -57,7 +57,7 @@
     z-index: 4;
     background: transparent;
     color: black;
-    text-align: right;
+    text-align: center;
     letter-spacing: -1px;
     line-height: 55px;
     font-size: 56px;
@@ -126,7 +126,7 @@
     height: 33px;
     border: 0;
     position: absolute;
-    left: 194px;
+    left: 174px;
     top: 84px;
 }
 
@@ -139,7 +139,7 @@
     height: 33px;
     border: 0;
     position: absolute;
-    left: 194px;
+    left: 174px;
     top: 50px;
 }
 
@@ -208,8 +208,16 @@
 
 .orderPrint .orderPrintOption {
     display: inline-block;
-    margin: 0 0 0 30px;
+    margin: 0 0 0 10px;
     font-size: 24px;
+}
+
+.orderPrint .orderPrintOption label {
+    text-align: center;
+    display: inline-block;
+    height: 42px;
+    width: 73;
+    cursor: pointer;
 }
 
 #editTools *{

@@ -1,6 +1,6 @@
 <script>
 	$('#galleryDialog').dialog('destroy');
-	$('#imageTextInput').die('keydown keyup paste focus').live('keydown keyup paste focus', function (e) {
+	$('#imageTextInput').die('keyup paste focus').live('keyup paste focus', function (e) {
         $(this).val($(this).val().replace(/([^ 0-9א-ת!?.,\n\r])/g, "")).trigger('change');
         var rows = $(this).val().split('\n');
         for(var i=0; i<rows.length;i++){
@@ -12,14 +12,20 @@
         	}
         }
         var newRows = [];
+        if (rows[0] != undefined && rows.length == 1 && rows[0].length == 10){
+        	var tmp = rows[0].split(' ');
+        	var lastword = tmp[tmp.length - 1];
+        	var newfirstline = delete tmp[tmp.length-1];
+        	var newfirstline = tmp.join(' ');
+        	rows[0] = newfirstline;
+        	rows[1] = lastword;
+        }
         if (rows[0] != undefined && rows.length > 0)
         	newRows[0] = rows[0];
         if (rows[1] != undefined && rows.length > 1)
         	newRows[1] = rows[1];
-
          if (newRows[0].substr(0,5) != 'ביבי ')
          	newRows[0] = newRows[0].replace(newRows[0].substr(0,4),'ביבי ');
-
         $(this).val(newRows.join('\n')).trigger('change');
     });
 </script>
@@ -129,15 +135,14 @@
 				id="imageTextInput"
 				maxRows="3"
 				maxChars="30"
-				required>
-			</textarea>
+				required>ביבי </textarea>
+			<img
+				ng-src="{{settings.host}}{{currentTemplate.path}}"
+				class="templateImagePreview" />
 			<div
 				id="editor"
 				class="clearfix {{toggleDraw}}">
 			</div>
-			<img
-				ng-src="{{settings.host}}{{currentTemplate.path}}"
-				class="templateImagePreview" />
 		</div>
 		
 		<div id="step_1" ng-show="stepCheck(1)" class="steps">
@@ -203,7 +208,7 @@
 				</label>
 			</div>
 			<div class="orderPrint">
-				<div style="font-size: 24px;">תרמו למפלגת העבודה וקבלו את המסר שעיצבתם בדרך שתבחרו:</div>
+				<div style="font-size: 24px; margin-bottom: 10px;">תרמו למפלגת העבודה וקבלו את המסר שעיצבתם בדרך שתבחרו:</div>
 				<div class="orderPrintOption">
 					<input
 						type="radio"
@@ -213,6 +218,7 @@
 						id="order_sticker"/>
 					<label
 						for="order_sticker">
+						<div><img src="img/choice_icon_sticker.png" width="73" height="42"/></div>
 						סטיקר
 					</label>
 				</div>
@@ -225,7 +231,8 @@
 						id="order_samsonite" checked/>
 					<label
 						for="order_samsonite">
-						שמשונית
+						<div><img src="img/choice_icon_sign.png" width="73" height="42" /></div>
+						שלט לתליה
 					</label>
 				</div>
 				<div class="orderPrintOption">
@@ -237,6 +244,7 @@
 						id="order_sign"/>
 					<label
 						for="order_sign">
+						<div><img src="img/choice_icon_sunscreen.png" width="73" height="42" /></div>
 						צילון לרכב
 					</label>
 				</div>
@@ -249,6 +257,7 @@
 						id="order_shirt" checked/>
 					<label
 						for="order_shirt">
+						<div><img src="img/choice_icon_shirt.png" /></div>
 						חולצה
 					</label>
 				</div>

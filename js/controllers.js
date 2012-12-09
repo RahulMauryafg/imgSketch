@@ -67,7 +67,8 @@ function GeneralCtrl($scope,$resource,$location){
 					posX: 320,
 					posY: 28,
 					width:"290",
-					height:"190" 
+					height:"190",
+					text: 'ביבי '
 				},
 				imageTemplate: $scope.currentTemplate.id,
 				imageData: {
@@ -328,6 +329,8 @@ function LoginCtrl($scope, $resource) {
 	}
 
 	$scope.order = function(skip){
+		$scope.uploadError = false;
+		$scope.uploading = false;
 		if (skip === true) {
 			$('#loginDialog').dialog('close');
 			$('#orderDialog').dialog('open');	
@@ -407,7 +410,7 @@ function OrderCtrl($scope, $location, $window){
 						p_IDNumber: $scope.formData.user.personId,
 						p_amount_agorot: $scope.formData.user.amount * 100,
 						p_payment_purpose: 'donate_campaign',
-						p_redirect: $location.$$protocol + '://' 
+						p_redirect_url: $location.$$protocol + '://' 
 							+ $location.$$host 
 							+ '/#' 
 							+ $location.$$path 
