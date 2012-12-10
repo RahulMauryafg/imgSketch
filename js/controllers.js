@@ -105,7 +105,7 @@ function GeneralCtrl($scope,$resource,$location){
 				houseNumber: '',
 				apartmentNumber: '',
 				personId: 0,
-				amount: 40,
+				amount: 50,
 				payments: 1
 
 			},

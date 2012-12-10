@@ -216,7 +216,10 @@
 			
 			_strokes = [];
 			_redraw_strokes();
-			_fire_change();
+			//fix for angularJS, _fire_change(); for some reason
+			//triggers an erroneous $apply event, disabling seems
+			//to have no side-effect.
+			//_fire_change();
 			
 			return self; // function-chaining
 		};
