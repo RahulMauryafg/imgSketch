@@ -258,6 +258,7 @@
     overflow: hidden;
     top: 125px;
 }
+
 .ui-dialog-titlebar {
     border: none;
     background: none;
@@ -289,6 +290,21 @@
 .ui-dialog .ui-dialog-titlebar-close span {
     display: none;
 }
+
+.firstDialog.ui-dialog {
+    background: transparent;
+}
+
+.firstDialog.ui-dialog .ui-dialog-titlebar {
+    display: none;
+}
+
+.firstDialog.ui-dialog .ui-dialog-content.ui-widget-content {
+    top: -9px;
+    left: 16px;
+    height: 241px !important;
+}
+
 
 #orderWrapper, #loginWrapper {
     width: 415px;

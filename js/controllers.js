@@ -53,6 +53,10 @@ function MainCtrl($scope, $route, $routeParams, $location, $window) {
 			encodeURIComponent(shareLink + '?random=' + Math.floor((Math.random()*100000000)+1)),
 			'sharer','toolbar=0,status=0,width=656,height=436');
 	}
+
+	setTimeout(function(){
+		$('#firstDialog').dialog('close');
+	}, 3000)
 }
 
 /*
