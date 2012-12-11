@@ -155,6 +155,10 @@
     border: none;
 }
 
+.button_next.true {
+    background: transparent url(../img/button_form_next_off.png) no-repeat center center;
+}
+
 .button_number {
     width: 25px;
     height: 25px;

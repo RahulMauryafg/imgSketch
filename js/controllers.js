@@ -475,7 +475,8 @@ function OrderCtrl($scope, $location, $window){
 						p_title: 'תרומה למפלגת העבודה',
 						p_payments_enabled: 1,
 						p_payments_number:  $scope.formData.user.payments,
-						p_OrderID: response.orderId
+						p_OrderID: response.orderId,
+						p_family_disabled: 1
 					}
 					var urlParams = $scope.encQuery(sendObj);
 					var payHost  = ($scope.config.production === 'dev' 

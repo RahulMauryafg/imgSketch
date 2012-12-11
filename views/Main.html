@@ -120,7 +120,7 @@
 					style="visibility:hidden;"/>
 				<label
 					for="order_download">
-					<img src="img/choice_icon_arrow.gif" widt="36" height="29"><span style="border-bottom: #a81d20 solid 2px; margin: 0 10px 0 0"><a ng-click="/*order('dl')*/"  style="text-decoration: none; color: white;" >לחצו כאן</a></span> והורידו את המסר שלכם כתמונת COVER לפייסבוק ללא תרומה!!
+					<img src="img/choice_icon_arrow.gif" widt="36" height="29"><span style="border-bottom: #a81d20 solid 2px; margin: 0 10px 0 0"><a ng-click="order('dl')"  style="text-decoration: none; color: white;" >לחצו כאן</a></span> והורידו את המסר שלכם כתמונת COVER לפייסבוק ללא תרומה!!
 				</label>
 			</div>
 			<div class="orderPrint">
@@ -377,7 +377,7 @@
 								ng-model="formData.user.checked"
 								required />
 							<lablel>אני מאשר/ת שקראתי והסכמתי לתנאי <a href="terms_of_use.pdf" target="_blank">התקנון</a></label>
-							<button ng-click="register()" class="button_next" ng-disabled="orderForm.$invalid" style="left: 2px; top: 7px;">&nbsp;</button>
+							<button ng-click="register()" class="button_next {{orderForm.$invalid}}" ng-disabled="orderForm.$invalid" style="left: 2px; top: 7px;">&nbsp;</button>
 							<img src="img/loader.gif" height="16" width="16p" ng-hide="!uploading" style="position: absolute; left: 70px; top: 16px;margin: -3px 0 0 5px;" />
 						</div>
 					</form>
