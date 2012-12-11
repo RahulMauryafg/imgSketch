@@ -18,7 +18,7 @@ function MainCtrl($scope, $route, $routeParams, $location, $window) {
 		},
 		payHost: {
 			dev: 'http://dev.shelly.org.il/checkout?',
-			production: 'http://shelly.org.il/checkout?'
+			production: 'https://hitpakdut.havoda.org.il/checkout'
 		},
 		school: true,
 		development: false,
