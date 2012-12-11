@@ -1,0 +1,107 @@
+<link rel="stylesheet" href="css/style.css" />
+<div id="searchWrapper">
+	<div style="width: 840px; padding: 0 60px 0 0; margin: 0 auto; position: relative;">
+		<input 
+		type="text" 
+		ng-model="search.filter.$"
+		placeholder="search"/>
+		<div class="actions" id="settings">
+			<a href="/Excel" target="_blank" class="action downloadButton">&nbsp;</a>
+			<ul style="display: inline-block;">
+				<a href="" class="action {{tooltip}} tooltipButton" ng-click="toggleTooltip()" >&nbsp;</a>
+				<ul class="tooltip active {{tooltip}}">
+					<li class="arrow"></li>
+					<li class="tooltipSettings">
+						<div>
+							<label>number of results:</label><input type="number" min="1" max="{{(orders | filter:search.filter).length}}" ng-model="search.limit"/>
+						</div>
+						<div>
+							<label>filter by status</label>
+							<select name="status" ng-model="search.filter.status">
+								<option value="">all</option>
+								<option value="true">enabled</option>
+								<option value="false">disabled</option>
+							</select>
+						</div>
+						<div>
+							<label>product type</label>
+							<select name="productType" ng-model="search.filter.productType">
+								<option value="">all</option>
+								<option value="FacebookCover">Cover</option>
+								<option value="Shirt">Shirt</option>
+								<option value="SunScreen">Sunscreen</option>
+								<option value="Shimshonit">Sign</option>
+							</select>
+						</div>
+					</li>
+				</ul>
+			</ul>
+		</div>
+	</div>
+
+</div>
+<div style="position: fixed; width: 100%; height: 100%; top: 0; left: 0; overflow: auto;">
+	<div id="resultWrapper">
+		<div class="generalItem">
+			total designs: {{orders.length}} |
+			search results: {{(orders | filter:search.filter).length}} | 
+			active designs: {{(orders | filter:{status:true}).length}} |
+			disabled designs: {{(orders | filter:{status:false}).length}}
+		</div>
+		<div ng-repeat="order in orders | filter:search.filter | limitTo:search.limit" ng-model="orders" class="item">
+			<div class="itemheader {{order.status}}"><span>{{order.id}}</span> - <span>{{order.name}}</span></div>
+			<div class="clearfix">
+				<div class="infoCol clearfix">
+					<div class="title">Personal</div>
+					<label>name:</label><div class="value">{{order.name}}</div>
+					<label>phone:</label><div class="value">{{order.phone}}</div>
+					<label>email:</label><div class="value">{{order.email}}</div>
+					<label>city:</label><div class="value">{{order.city}}</div>
+					<label>address:</label><div class="value">{{order.street}} {{order.houseNumber}} {{order.apartmentNumber}}</div>
+					<label>zip:</label><div class="value">{{order.zip}}</div>
+					<label>id #:</label><div class="value">{{order.personId}}</div>
+				</div>
+				<div class="infoCol clearfix">
+					<div class="title">Order</div>
+					<label>product:</label><div class="value">{{order.productType}}</div>
+					<label>amount:</label><div class="value">{{order.amount | currency:"₪"}}</div>
+					<label>payments:</label><div class="value">{{order.payments}}</div>
+				</div>
+			</div>
+			<img ng-src="{{order.thumbnailPath}}" class="thumb" width="295" height="109" ng-click="zoom(order)"/>
+			<div class="actions">
+				<div 
+					ng-click="toggleStatus(order)" 
+					class="action delete {{order.status}}"></div>
+				<a class="action download" href="{{order.imagePath}}"></a>
+				<div ng-click="zoom(order)" class="action zoom"></div>
+			</div>
+		</div>
+	</div>
+	<div id="logo" style="width: 174px; margin: 10px auto 0 auto; z-index: 5; position: relative;">
+		<a href="http://mediamagic.co.il/" border="0" target="_blank"><img src="../img/logo_heb.png" height="35" width="174"/></a>
+	</div>
+</div>
+
+<!-- {
+	"fbUid":0,
+	"phone":"+972524447",
+	"email":"djabor+1@gmail.com",
+	"city":"Rehovot",
+	"street":"dfbhdfgh",
+	"houseNumber":"34",
+	"apartmentNumber":"",
+	"zip":"",
+	"personId":"209829494",
+	"amount":"50.0000",
+	"payments":"1",
+	"text":"ביבי",
+	"productType":"Shirt",
+	"shirtSize":"M",
+	"ip":"82.80.175.92",
+	"dateCreated":"10/12/2012 16:06:19",
+	"imagePath":"http://gi.mediamagic.co.il/clients/avoda/PrintingCreator/Resources/Printings/10_4TNJXLUETQ8Y.jpg",
+	"thumbnailPath":"http://gi.mediamagic.co.il/clients/avoda/PrintingCreator/Resources/Printings/10_thumbnail_4TNJXLUETQ8Y.jpg",
+	"mediumThumbnailPath":"http://gi.mediamagic.co.il/clients/avoda/PrintingCreator/Resources/Printings/10_medium_4TNJXLUETQ8Y.jpg",
+	"status":false
+} -->
