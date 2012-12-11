@@ -171,6 +171,11 @@
     background: transparent url(../img/button_number.png) no-repeat center center;
 }
 
+.button_number#clearDraw {
+    padding-top: 1px;
+    background: transparent url(../img/button_undo.png) no-repeat center center;   
+}
+
 .button_edit_text {
     width: 25px;
     height: 25px;
