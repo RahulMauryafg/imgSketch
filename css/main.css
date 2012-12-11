@@ -225,14 +225,15 @@ html, body {
     position: absolute;
 }
 
-#footer div {
+#footer a {
     display: inline-block;
     height: 32px;
+    margin: 0 5px 0 0px;
 }
 
 #footer #share {
-    position: absolute;
-    right: 10px;
+   /* position: absolute;
+    right: 10px;*/
     line-height: 32px;
     width: 70px;
     height: 32px;
@@ -241,8 +242,8 @@ html, body {
 }
 
 #footer #navGallery {
-    position: absolute;
-    right: 88px;
+    /*position: absolute;
+    right: 88px;*/
     line-height: 32px;
     width: 94px;
     height: 32px;
@@ -251,8 +252,8 @@ html, body {
 }
 
 #footer #navHome {
-    position: absolute;
-    right: 88px;
+    /*position: absolute;
+    right: 88px;*/
     line-height: 32px;
     width: 124px;
     height: 32px;
@@ -260,8 +261,21 @@ html, body {
     display: inline-block;   
 }
 
+#footer #navDonate {
+    /*position: absolute;
+    right: 191px;*/
+    line-height: 32px;
+    width: 114px;
+    height: 32px;
+    background: url(../img/nav_mitnadvim.jpg) no-repeat center center;
+    display: inline-block;   
+}
+
+
+
 #footer #logout {
-    position: absolute;
+    position: relative;
+    top: -10px;
     display: inline-block;
     color: white;
     height: 32px;
