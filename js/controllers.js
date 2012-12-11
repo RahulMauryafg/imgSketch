@@ -455,6 +455,25 @@ function OrderCtrl($scope, $location, $window){
 		return ret.join("&");
 	}
 
+	$scope.post_to_url = function(path, params, method) {
+	    method = method || "post";
+	    var form = document.createElement("form");
+	    form.setAttribute("method", method);
+	    form.setAttribute("action", path);
+	    for(var key in params) {
+	        if(params.hasOwnProperty(key)) {
+	            var hiddenField = document.createElement("input");
+	            hiddenField.setAttribute("type", "hidden");
+	            hiddenField.setAttribute("name", key);
+	            hiddenField.setAttribute("value", params[key]);
+	            form.appendChild(hiddenField);
+	         }
+	    }
+	    document.body.appendChild(form);
+	    form.submit();
+	}
+
+
 	$scope.register = function(){
 		$scope.uploading = true;
 		if ($scope.config.development === false) {
@@ -483,8 +502,7 @@ function OrderCtrl($scope, $location, $window){
 						|| $scope.config.production === 'staging') ? 
 						$scope.config.payHost.dev : 
 						$scope.config.payHost.production;
-					var redirectUrl = payHost + urlParams;
-					$window.location = redirectUrl;
+					$scope.post_to_url(payHost, sendObj, 'POST');
 					$scope.reset();
 				});
 		}
