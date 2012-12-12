@@ -110,7 +110,7 @@
     padding: 12px 13px 11px 13px;
 }
 
-.templatePreview .templateImagePreview { position: absolute; z-index: 1;}
+.templatePreview .templateImagePreview { z-index: 1;}
 .templatePreview .templateSketchPreview { position: absolute; z-index: 2; height: 180px; width: 180px; border: transparent solid 1px;}
 .templatePreview .templateSketchPreview:hover {border: blue dotted 1px;}
 .templatePreview .templateSketchPreview *:hover {cursor: move;}
