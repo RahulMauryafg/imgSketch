@@ -64,6 +64,7 @@
 				<div class="infoCol clearfix">
 					<div class="title">Order</div>
 					<label>product:</label><div class="value">{{order.productType}}</div>
+					<label ng-hide="order.productType != 'Shirt'">size:</label><div ng-hide="order.productType != 'Shirt'" class="value">{{order.shirtSize}}</div>
 					<label>amount:</label><div class="value">{{order.amount | currency:"₪"}}</div>
 					<label>payments:</label><div class="value">{{order.payments}}</div>
 				</div>
