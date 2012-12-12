@@ -22,8 +22,10 @@
 		<!--script src="js/vendor/modernizr-2.6.2.min.js"></script-->
 	</head>
 	<body>
-		<!--[if lt IE 7]>
-		<p class="chromeframe">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> or <a href="http://www.google.com/chromeframe/?redirect=true">activate Google Chrome Frame</a> to improve your experience.</p>
+		<!--[if lte IE 8]>
+			<p class="chromeframe" style="text-align: center; font-size: 20px; height: 50px; line-height: 50px; background: #ffffcc;">
+				אתר זה מותאם לצפיה מדפדפן <strong>אקספלורר מגירסא 9</strong> ומעלה
+				אנא <a href="http://browsehappy.com/">עדכן את גירסאת הדפדפן שלך</a> או <a href="http://www.google.com/chromeframe/?redirect=true">הפעל Google Chrome Frame</a> לשפר את חווית הגלישה שלך באתר </p>
 		<![endif]-->
 
 		<div id="fb-root"></div>
@@ -53,6 +55,7 @@
 		<div ng-view id="wrapper" style="position: relative; z-index: 4"></div>
 		<div id="logo" style="width: 720px; margin: -10px auto 0 auto; z-index: 5; position: relative;">
 			<a href="http://mediamagic.co.il/" border="0" target="_blank"><img src="img/logo_heb.png" height="35" width="174"/></a>
+			<img style="float: left;" src="img/gilogo.png" height="35" width="210"/>
 		</div>
 		<script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
 		<script>window.jQuery || document.write('<script src="js/vendor/jquery-1.8.2.min.js"><\/script>')</script>

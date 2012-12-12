@@ -5,15 +5,15 @@
         $(this).val($(this).val().replace(/([^ 0-9א-ת!?.,\n\r])/g, "")).trigger('change');
         var rows = $(this).val().split('\n');
         for(var i=0; i<rows.length;i++){
-        	if (rows[i].length > 10){
+        	if (rows[i].length > 12){
         		if (rows.length < 2)
-        			rows[i] = rows[i].substr(0,10) + '\n';
+        			rows[i] = rows[i].substr(0,12) + '\n';
         		else
-        			rows[i] = rows[i].substr(0,10);
+        			rows[i] = rows[i].substr(0,12);
         	}
         }
         var newRows = [];
-        if (rows[0] != undefined && rows.length == 1 && rows[0].length == 10){
+        if (rows[0] != undefined && rows.length == 1 && rows[0].length == 12){
         	var tmp = rows[0].split(' ');
         	var lastword = tmp[tmp.length - 1];
         	var newfirstline = delete tmp[tmp.length-1];
@@ -207,7 +207,7 @@
 		id="loginDialog" 
 		ng-controller="LoginCtrl" 
 		ui-jq="dialog" 
-		ui-options="{title:'',autoOpen: false, height: 271, width: 532, modal: true, resizable: false, draggable: false, position: ['center', 110]}">
+		ui-options="{title:'',autoOpen: false, height: 454, width: 678, modal: true, resizable: false, draggable: false, position: ['center', 50]}">
 		<div id="loginWrapper">
 			<div class="loginTitle" ng-show="!fbMode()">התחברו להורדת תמונת COVER</div>
 			<div class="loginTitle" ng-show="fbMode()">על מנת להזמין את השלט שבחרתם עליכם למלא פרטים, איך תרצו להמשיך?</div>
@@ -228,18 +228,21 @@
 		<div
 			id="orderDialog"
 			ui-jq="dialog"
-			ui-options="{title:'',autoOpen: false, height: 271, width: 532, modal: true, resizable: false, draggable: false, position: ['center', 110]}">
+			ui-options="{title:'',autoOpen: false, height: 454, width: 678, modal: true, resizable: false, draggable: false, position: ['center', 50]}">
 			<div 
 				id="orderWrapper">
 				<div 
 					class="orderTitle">לקבלת המסר שעיצבת השלם את הפרטים הבאים:
+				</div>
+				<div
+					class="switchToCover" ng-click="switchToCover()">
 				</div>
 				<div style="margin: -10px 0 0 0;">
 					<form name="orderForm"
 						novalidate>
 						<label>המסר שלך יודפס על: {{formData.order.type|orderType}}</label>
 						<div 
-							ng-hide="showSizes()">
+							ng-hide="showSizes()" class="order_inputs">
 							<label>בחר מידה: </label>
 							<div style="direction: ltr; display: inline-block;">
 								<label for="size_XL">XL</label>
@@ -266,7 +269,7 @@
 							</div>
 						</div>
 						<div class="order_inputs">
-							<label style="width: 80px;">סכום לתרומה:</label>
+							<label style="width: 120px;">סכום לתרומה:</label>
 							<select name="amount" ng-model="formData.user.amount">
 								<option value="50" checked>50 ₪</option>
 								<option value="100">100 ₪</option>
@@ -275,9 +278,9 @@
 							</select>
 						</div>
 						<div class="order_inputs">
-							<label style="width: 80px;">מס' תשלומים</label>
+							<label style="width: 120px;">מס' תשלומים</label>
 							<select
-								style="width: 50px; margin-left: 140px;"
+								style="width: 50px; margin-left: 180px;"
 								name="payments"
 								ng-model="formData.user.payments"
 								required >
@@ -285,9 +288,9 @@
 								<option value="2">2</option>
 								<option value="3">3</option>
 							</select>
-							<label>ת.ז.</label>
+							<label style="width: 59px;">ת.ז.</label>
 							<input 
-								style="width: 100px;"
+								style="width: 140px;"
 								type="number"
 								name="personId"
 								placeholder="123456789"
@@ -297,17 +300,17 @@
 								required />
 						</div>
 						<div class="order_inputs">
-							<label style="width: 65px;">שם המזמין:</label>
+							<label style="width: 105px;">שם המזמין:</label>
 							<input 
-								style="width: 116px; margin-left: 12px;"
+								style="width: 156px; margin-left: 12px;"
 								type="text" 
 								name="name"
 								placeholder="שם מלא"
 								ng-model="formData.user.name"
 								required />
-							<label style="width: 45px;">טלפון:</label>
+							<label style="width: 85px;">טלפון:</label>
 							<input
-								style="width: 139px;"
+								style="width: 179px;"
 								type="tel"
 								name="phone"
 								placeholder="0501234567"
@@ -317,17 +320,17 @@
 								required />
 						</div>
 						<div class="order_inputs">
-							<label style="width: 44px;">דוא"ל:</label>
+							<label style="width: 84px;">דוא"ל:</label>
 							<input
-								style="width: 137px; margin-left: 10px;"
+								style="width: 177px; margin-left: 10px;"
 								type="email"
 								name="email"
 								placeholder="email@domain.com"
 								ng-model="formData.user.email"
 								required />
-							<label style="width: 35px;">עיר:</label>
+							<label style="width: 75px;">עיר:</label>
 							<input 
-								style="width: 151px;"
+								style="width: 191px;"
 								type="text" 
 								name="city"
 								placeholder="עיר מגורים"
@@ -336,33 +339,33 @@
 								required />
 						</div>
 						<div class="order_inputs">
-							<label style="width: 30px;">רחוב:</label>
+							<label style="width: 50px;">רחוב:</label>
 							<input 
-								style="width: 65px; margin-left: 4px;"
+								style="width: 85px; margin-left: 4px;"
 								type="text" 
 								name="street"
 								placeholder="שם רחוב"
 								ng-pattern="/[a-zA-Zא-ת,.]/"
 								ng-model="formData.user.street" 
 								required />
-							<label style="width: 45px;">מס' בית:</label>
+							<label style="width: 75px;">מס' בית:</label>
 							<input
-								style="width:17px; margin-left: 4px;"
+								style="width:27px; margin-left: 4px;"
 								type="text" 
 								name="homenumber"
 								placeholder=""
 								ng-model="formData.user.houseNumber" 
 								required />
-							<label style="width: 51px;">מס' דירה:</label>
+							<label style="width: 81px;">מס' דירה:</label>
 							<input
-								style="width: 17px; margin-left: 8px;"
+								style="width: 27px; margin-left: 8px;"
 								type="text" 
 								name="appnumber"
 								placeholder=""
 								ng-model="formData.user.apartmentNumber" />
-							<label style="width: 36px;">מיקוד:</label>
+							<label style="width: 56px;">מיקוד:</label>
 							<input
-								style="width: 60px;"
+								style="width: 80px;"
 								type="text" 
 								name="zip"
 								placeholder=""
@@ -370,7 +373,7 @@
 								ng-pattern="/[0-9]{2}/"
 								ng-model="formData.user.zip"/>
 						</div>
-						<div style="position: relative; height: 57px;" class="clearfix">
+						<div style="position: relative; height: 57px; top: 20px;" class="clearfix">
 							<input 
 								type="checkbox" 
 								value= "1"
@@ -391,7 +394,7 @@
 		<div
 			id="thankyouDialog"
 			ui-jq="dialog"
-			ui-options="{title:'',autoOpen: false, height: 271, width: 532, modal: true, resizable: false, draggable: false, position: ['center', 110]}">
+			ui-options="{title:'',autoOpen: false, height: 454, width: 678, modal: true, resizable: false, draggable: false, position: ['center', 50]}">
 			<div  id="thankyouWrapper">
 				<div ng-hide="checkOrderType()" class="thankyouTitle">
 						תודה בקשתכם התקבלה.

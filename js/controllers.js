@@ -83,9 +83,9 @@ function GeneralCtrl($scope,$resource,$location){
 		$scope.formData = {
 			payload: {
 				imageText: {
-					posX: 320,
+					posX: 300,
 					posY: 28,
-					width:"290",
+					width:"330",
 					height:"190",
 					text: 'ביבי '
 				},
@@ -446,6 +446,12 @@ function OrderCtrl($scope, $location, $window){
 		} else {
 			return true;
 		}
+	}
+
+	$scope.switchToCover = function(){
+		$('#orderDialog').dialog('close');
+		$scope.formData.order.type = 'FacebookCover';
+		$('#loginDialog').dialog('open');
 	}
 
 	$scope.encQuery = function(data) {
