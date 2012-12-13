@@ -118,8 +118,14 @@
 					id="order_download"
 					style="visibility:hidden;"/>
 				<label
-					for="order_download">
-					<img src="img/choice_icon_arrow.gif" widt="36" height="29"><span style="border-bottom: #a81d20 solid 2px; margin: 0 10px 0 0"><a ng-click="order('dl')"  style="text-decoration: none; color: white;" >לחצו כאן</a></span> והורידו את המסר שלכם כתמונת COVER לפייסבוק ללא תרומה!!
+					for="order_download" 
+					style="border: white solid 2px; padding: 7px; background: url(img/button_bg_x.png) repeat-x; height: 23px; line-height: 23px; cursor: pointer;"
+					ng-click="order('dl'); uploading = true; uploadError=false; $broadcast('fbLogin');">
+					<!-- <img src="img/choice_icon_arrow.gif" widt="36" height="29" />
+					<span style="border-bottom: #a81d20 solid 2px; margin: 0 10px 0 0">
+						<a ng-click="order('dl'); uploading = true; uploadError=false; $broadcast('fbLogin');"  style="text-decoration: none; color: white;" >לחצו כאן</a>
+					</span> והורידו את המסר שלכם כתמונת COVER לפייסבוק ללא תרומה!! -->
+					שתפ בפייסבוק <img src="img/button_fb_connect.png" width="191" height="23" />
 				</label>
 			</div>
 			<div class="orderPrint">
@@ -193,7 +199,7 @@
 	</form>
 	<div id="footer">
 		<a id="share" ng-click="shareFB()"></a>
-		<a id="navGallery" href="#/gallery")"></a>
+		<a id="navGallery" href="#/gallery"></a>
 		<a id="navDonate" href="http://members.havoda.org.il/volunteer" target="_blank" ng-click="track('/volunteer')"></a>
 		<a id="logout" ng-show="formData.user.fbUid > 0" ng-click="$broadcast('fbLogout')">להתנתק מפייסבוק</a>
 	</div>
@@ -209,7 +215,7 @@
 		ui-jq="dialog" 
 		ui-options="{title:'',autoOpen: false, height: 454, width: 678, modal: true, resizable: false, draggable: false, position: ['center', 50]}">
 		<div id="loginWrapper">
-			<div class="loginTitle" ng-show="!fbMode()">התחברו להורדת תמונת COVER</div>
+			<div class="loginTitle" ng-show="!fbMode()">שיתוף תמונה בפייסבוק</div>
 			<div class="loginTitle" ng-show="fbMode()">על מנת להזמין את השלט שבחרתם עליכם למלא פרטים, איך תרצו להמשיך?</div>
 			<button class="loginFacebook" ng-click="$emit('fbLogin'); uploading = true; uploadError=false" ng-hide="uploading" ng-disabled="uploading">&nbsp;</button>
 			<div class="loginLoader" ng-hide="!uploading"><img src="img/loader.gif" height="16" width="16p" style="margin: -3px 0 0 5px;" /> תקשורת מול פייסבוק ...</div>
@@ -291,7 +297,7 @@
 							<label style="width: 59px;">ת.ז.</label>
 							<input 
 								style="width: 140px;"
-								type="number"
+								type="text"
 								name="personId"
 								placeholder="123456789"
 								ng-model="formData.user.personId"
@@ -401,7 +407,7 @@
 				</div>
 				<div ng-show="checkOrderType()">
 					<div class="thankyouTitle download">
-						תודה בקשתכם התקבלה.
+						התמונה שותפה בהצלחה<br/>
 						<a id="coverLink" href="//www.facebook.com/me?preview_cover={{photoId}}" target="_blank">&nbsp;</a>
 					</div>
 					<div id="downloadLink">

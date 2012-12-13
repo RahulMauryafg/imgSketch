@@ -256,7 +256,7 @@ function GeneralCtrl($scope,$resource,$location){
 }
 
 function LoginCtrl($scope, $resource) {
-	$scope.uploading = false;
+	//$scope.uploading = false;
 	$scope.fbState = 0;
 	$scope.hideSkip = false;
 
@@ -296,7 +296,7 @@ function LoginCtrl($scope, $resource) {
 	}
 
 	$scope.fbProcess = function(){
-		$scope.uploading = false;
+		$scope.uploading = true;
 		if ($scope.fbState === 2) {
 			console.log('authorized, processing fb data');
 			$scope.updateUserFromFB(function(){
@@ -331,6 +331,11 @@ function LoginCtrl($scope, $resource) {
 				if (response.authResponse) {
 					console.log('fb authorized -> triggering fbLogin process');
 					$scope.$emit('fbLogin');
+				} else {
+					if ($scope.fbMode() === false ) {
+						$('#loginDialog').dialog('close');
+						$scope.uploading = false;
+					}
 				}
 			}, {scope:'email,publish_stream,user_photos'});
 		}
@@ -376,6 +381,10 @@ function LoginCtrl($scope, $resource) {
 	}
 
 	$scope.order = function(skip){
+		if (skip != undefined && skip === 'dl'){
+			$scope.track('/main/stage3/Cover/Login');
+			$scope.formData.order.type = 'FacebookCover';
+		}
 		$scope.uploadError = false;
 		$scope.uploading = false;
 		$scope.hideSkip = false;
