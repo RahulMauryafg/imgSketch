@@ -47,8 +47,12 @@ function MainCtrl($scope, $route, $routeParams, $location, $window) {
 
 	$scope.shareFB = function(imageId) {
 		var shareLink = $location.$$protocol + ':' + $scope.host;
-		if (imageId != undefined)
+		if (imageId != undefined) {
 			shareLink = shareLink + '/message/'+ imageId;
+			$scope.track('/gallery/share/image');
+		} else {
+			($location.$$path === '/main') ? $scope.track('/main/share') : $scope.track('/gallery/share');
+		}
 		$window.open('//www.facebook.com/sharer.php?u=' + 
 			encodeURIComponent(shareLink + '?random=' + Math.floor((Math.random()*100000000)+1)),
 			'sharer','toolbar=0,status=0,width=656,height=436');
@@ -57,6 +61,15 @@ function MainCtrl($scope, $route, $routeParams, $location, $window) {
 	setTimeout(function(){
 		$('#firstDialog').dialog('close');
 	}, 3000)
+
+	$scope.track = function(action){
+		//console.log('tracking: ' + action);
+		return $window._gaq.push(['_trackPageview', action]);
+	}
+
+	 $scope.$on('$viewContentLoaded', function(){
+	 	($location.$$path === '/main') ? $scope.track('/main/stage1') : $scope.track('/gallery');
+	 });
 }
 
 /*
@@ -191,10 +204,12 @@ function GeneralCtrl($scope,$resource,$location){
 		if ($scope.config.selectType === true) {
 			$scope.currentStep = step;
 			if (step >= 2) {
+				$scope.track('/main/stage2');
 				$scope.toggleDraw = false;
 				$scope.toggleText = true;
 				$scope.sketchpad.editing(false);
 			} else {
+				$scope.track('/main/stage1');
 				$scope.toggleText = false;
 			}
 		} else {
@@ -210,7 +225,10 @@ function GeneralCtrl($scope,$resource,$location){
 
 	$scope.order = function(type){
 		if (type != undefined && type === 'dl'){
+			$scope.track('/main/stage3/Cover/Login');
 			$scope.formData.order.type = 'FacebookCover';
+		} else {
+			$scope.track('/main/stage4/Print/Login');
 		}
 		if ($scope.config.fb) {
 			$('#loginDialog').dialog('open');
@@ -266,6 +284,7 @@ function LoginCtrl($scope, $resource) {
 
 	$scope.$on('fbLogout', function(){
 		$scope.updateUserFromFB('logout');
+		$scope.track('/fbLogout');
 	});
 
 	$scope.fbMode = function(){
@@ -287,6 +306,7 @@ function LoginCtrl($scope, $resource) {
 					$scope.order(false);
 				} else if ($scope.fbMode() === false){
 					console.log('order type: COVER -> upload image -> cb');
+					$scope.track('/main/stage4/Cover/Fb/')
 					$scope.formData.payload.imageData.data = $scope.svgFix();
 					var userObj = {
 						user: {
@@ -360,9 +380,11 @@ function LoginCtrl($scope, $resource) {
 		$scope.uploading = false;
 		$scope.hideSkip = false;
 		if (skip === true) {
+			$scope.track('/main/stage4/Print/NoFb');
 			$('#loginDialog').dialog('close');
-			$('#orderDialog').dialog('open');	
+			$('#orderDialog').dialog('open');
 		} else {
+			$scope.track('/main/stage4/Print/Fb');
 			$scope.$apply(function(){
 				$('#loginDialog').dialog('close');
 				$('#orderDialog').dialog('open');
@@ -449,6 +471,7 @@ function OrderCtrl($scope, $location, $window){
 	}
 
 	$scope.switchToCover = function(){
+		$scope.track('/main/stage3/Cover/Login/fromPrint');
 		$('#orderDialog').dialog('close');
 		$scope.formData.order.type = 'FacebookCover';
 		$('#loginDialog').dialog('open');
@@ -488,6 +511,7 @@ function OrderCtrl($scope, $location, $window){
 			$scope.Rest.save({collection: 'order'}, $scope.formData, 
 				function(response){
 					$('#orderDialog').dialog('close');
+					$scope.track('/main/stage5/Print/checkout');
 					var sendObj = {
 						p_IDNumber: $scope.formData.user.personId,
 						p_amount_agorot: $scope.formData.user.amount * 100,

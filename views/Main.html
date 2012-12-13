@@ -193,8 +193,8 @@
 	</form>
 	<div id="footer">
 		<a id="share" ng-click="shareFB()"></a>
-		<a id="navGallery" href="#/gallery"></a>
-		<a id="navDonate" href="http://members.havoda.org.il/volunteer" target="_blank"></a>
+		<a id="navGallery" href="#/gallery")"></a>
+		<a id="navDonate" href="http://members.havoda.org.il/volunteer" target="_blank" ng-click="track('/volunteer')"></a>
 		<a id="logout" ng-show="formData.user.fbUid > 0" ng-click="$broadcast('fbLogout')">להתנתק מפייסבוק</a>
 	</div>
 </div>
