@@ -30,7 +30,7 @@
         $(this).val(newRows.join('\n')).trigger('change');
     });
 </script>
-<link rel="stylesheet" href="css/sketch.css">
+<link rel="stylesheet" href="/css/sketch.css">
 <div id="page_inner" class="{{config.school}}">
 	<form novalidate name="imageForm">
 		<input type="text" ng-hide="true" name="sketchData" ng-model="formData.payload.imageData.data" id="sketchData"/>
@@ -119,12 +119,8 @@
 					style="visibility:hidden;"/>
 				<label
 					for="order_download" 
-					style="border: white solid 2px; padding: 7px; background: url(img/button_bg_x.png) repeat-x; height: 23px; line-height: 23px; cursor: pointer;"
+					style="border: white solid 2px; padding: 7px; background: url(img/button_bg_x.png) repeat-x; height: 23px; line-height: 23px; cursor: pointer; display: block;"
 					ng-click="order('dl'); uploading = true; uploadError=false; $broadcast('fbLogin');">
-					<!-- <img src="img/choice_icon_arrow.gif" widt="36" height="29" />
-					<span style="border-bottom: #a81d20 solid 2px; margin: 0 10px 0 0">
-						<a ng-click="order('dl'); uploading = true; uploadError=false; $broadcast('fbLogin');"  style="text-decoration: none; color: white;" >לחצו כאן</a>
-					</span> והורידו את המסר שלכם כתמונת COVER לפייסבוק ללא תרומה!! -->
 					שתף בפייסבוק <img src="img/button_fb_connect.png" width="191" height="23" />
 				</label>
 			</div>
