@@ -459,8 +459,8 @@
 
 #orderWrapper .switchToCover {
     background: url(../img/button_switch_flow.png);
-    width: 275px;
-    height: 62px;
+    width: 274px;
+    height: 72px;
     position: absolute;
     left: 50px;
     cursor: pointer;
