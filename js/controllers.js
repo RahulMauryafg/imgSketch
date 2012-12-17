@@ -228,7 +228,7 @@ function GeneralCtrl($scope,$resource,$location){
 			$scope.track('/main/stage3/Cover/Login');
 			$scope.formData.order.type = 'FacebookCover';
 		} else {
-			$scope.track('/main/stage4/Print/Login');
+			$scope.track('/main/stage3/Print/Login');
 		}
 		if ($scope.config.fb) {
 			$('#loginDialog').dialog('open');
