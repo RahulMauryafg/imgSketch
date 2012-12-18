@@ -155,6 +155,12 @@
     border: none;
 }
 
+.button_next#next_step0 {
+    width: 103px;
+    height: 46px;
+    background: transparent url(../img/button_form_large.png) no-repeat center center;
+}
+
 .button_next.true {
     background: transparent url(../img/button_form_next_off.png) no-repeat center center;
 }

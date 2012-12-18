@@ -43,6 +43,7 @@
 		<input type="text" ng-hide="true" name="textWidth" ng-model="formData.payload.imageText.width" id="textWidth" />
 		<div id="templateHeader" style="font-size: 30px; position: absolute; top: 15px; right: 57px; " ng-show="stepCheck(1)">1.עצבו את המסר שלכם:</div>
 		<div class="templatePreview">
+			<span ng-show="!toggleText" id="textheader" style="font-size: 24px; position: absolute; top: 13px; right: 55px; color: #a41c1f; z-index: 3;">כיתבו כאן:</span>
 			<textarea
 				class="area limited {{!toggleText}} tpl{{currentTemplate.id}}"
 				placeholder="טקסט"
